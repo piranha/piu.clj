@@ -1,0 +1,42 @@
+{:paths ["src" "resources"]
+ :deps
+ {org.clojure/clojure               {:mvn/version "1.10.1"}
+  ring                              {:mvn/version "1.8.0"}
+  metosin/reitit-core               {:mvn/version "0.4.2"}
+  metosin/reitit-ring               {:mvn/version "0.4.2"}
+  metosin/reitit-middleware         {:mvn/version "0.4.2"}
+  metosin/jsonista                  {:mvn/version "0.2.5"}
+  mount                             {:mvn/version "0.1.16"}
+  hiccup                            {:mvn/version "1.0.5"}
+  seancorfield/next.jdbc            {:mvn/version "1.0.395"}
+  org.xerial/sqlite-jdbc            {:mvn/version "3.30.1"}
+  buddy/buddy-sign                  {:mvn/version "3.1.0"}
+  com.vladsch.flexmark/flexmark-all {:mvn/version "0.60.2"}
+  org.slf4j/slf4j-api               {:mvn/version "1.7.30"}
+  org.slf4j/slf4j-simple            {:mvn/version "1.7.30"}}
+
+ :jvm-opts ["-Djava.net.preferIPv4Stack=true"
+            "-Djava.net.preferIPv4Addresses=true"]
+
+ :aliases
+ {:dev {:extra-deps {nrepl/nrepl       {:mvn/version "0.6.0"}
+                     cider/cider-nrepl {:mvn/version "0.22.4"}
+                     refactor-nrepl    {:mvn/version "2.5.0"}}
+        :main-opts  ["-i dev/user.clj"
+                     "-m nrepl.cmdline -i"
+                     "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
+
+  :native {:main-opts ["-m clj.native-image piu.main"
+                       ;; optional native image name override
+                       "-H:Name=piu"
+                       "--initialize-at-build-time"
+                       "--no-server"]
+           :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
+                       "-Dclojure.spec.skip-macros=true"]
+           :extra-deps
+           {clj.native-image
+            {:git/url "https://github.com/taylorwood/clj.native-image.git"
+             :sha     "602587dfb5243ea8c72ed3e967c37c1f9d611723"}}}
+
+  :ancient {:extra-deps {olical/depot {:mvn/version "1.8.4"}}
+            :main-opts  ["-m" "depot.outdated.main"]}}}
