@@ -10,11 +10,16 @@
 (set! *warn-on-reflection* true)
 
 
+(def port (or (System/getenv "PORT") "8000"))
+
+
 (mount/defstate server
-  :start (jetty/run-jetty app/app {:join? false :port 8000})
+  :start (jetty/run-jetty app/app {:join? false
+                                   :port  (Integer/parseInt port)})
   :stop  (.stop ^Server server))
 
 
 (defn -main [& args]
   (println "Starting...")
-  (mount/start))
+  (mount/start)
+  (println "Started on port" port))

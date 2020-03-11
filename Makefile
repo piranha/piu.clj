@@ -6,11 +6,13 @@ run:
 	clj -A:dev
 
 uber:
+	clojure -Srepro -e "(compile 'piu.main)"
 	clojure -Srepro -A:uber
 
 native:
 	$(GRAALVM_HOME)/bin/native-image -jar target/piu.jar \
-		-H:name=piu \
+		-H:Name=piu \
+		-H:+TraceClassInitialization \
 		-H:+ReportExceptionStackTraces \
 		-J-Dclojure.spec.skip-macros=true \
 		-J-Dclojure.compiler.direct-linking=true \
@@ -18,10 +20,11 @@ native:
 		-H:Log=registerResource: \
 		-H:EnableURLProtocols=http,https \
 		--enable-all-security-services \
-		--verbose \
 		--no-server \
 		--no-fallback \
-		--report-unsupported-elements-at-runtime
+		--report-unsupported-elements-at-runtime \
+		--language:js
 
 compile:
+#	$(JAVA_HOME)/bin/javac -cp $(JAVA_HOME)/jre/lib/svm/builder/svm.jar resources/CutOffCoreServicesDependencies.java
 	clojure -Srepro -A:native

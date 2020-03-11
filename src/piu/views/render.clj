@@ -1,22 +1,11 @@
 (ns piu.views.render
-  (:import [com.vladsch.flexmark.parser Parser]
-           [com.vladsch.flexmark.html HtmlRenderer]
-           [com.vladsch.flexmark.util.data MutableDataSet]
-           [com.vladsch.flexmark.ext.tables TablesExtension]
-           [com.vladsch.flexmark.ext.anchorlink AnchorLinkExtension]
-           [com.vladsch.flexmark.ext.autolink AutolinkExtension]
-           [com.vladsch.flexmark.ext.footnotes FootnoteExtension]
-           [com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughSubscriptExtension]
-           [com.vladsch.flexmark.ext.gfm.tasklist TaskListExtension]
-           [com.vladsch.flexmark.ext.ins InsExtension]
-           [com.vladsch.flexmark.ext.superscript SuperscriptExtension]
-           [com.vladsch.flexmark.ext.toc TocExtension]
-           [com.vladsch.flexmark.ext.typographic TypographicExtension])
   (:require [hiccup.core :as hi]
             [hiccup.page :refer [doctype]]
             [clojure.string :as str]
+            [markdown.core :as markdown]
 
             [piu.views.base :as base]))
+
 
 (set! *warn-on-reflection* true)
 
@@ -38,26 +27,34 @@
       (base/footer)]]))
 
 
-(let [opts     (doto (MutableDataSet.)
-                 (.set Parser/EXTENSIONS
-                   [(TablesExtension/create)
-                    (AnchorLinkExtension/create)
-                    (AutolinkExtension/create)
-                    (FootnoteExtension/create)
-                    (StrikethroughSubscriptExtension/create)
-                    (TaskListExtension/create)
-                    (InsExtension/create)
-                    (SuperscriptExtension/create)
-                    (TocExtension/create)
-                    (TypographicExtension/create)])
-                 (.set HtmlRenderer/PERCENT_ENCODE_URLS true)
-                 (.set TablesExtension/COLUMN_SPANS false)
-                 (.set TablesExtension/APPEND_MISSING_COLUMNS true)
-                 (.set TablesExtension/DISCARD_EXTRA_COLUMNS true)
-                 (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true))
-      parser   (.build (Parser/builder opts))
-      renderer (.build (HtmlRenderer/builder opts))]
-  (defn render [^String md]
-    (let [doc  (.parse parser md)
-          html (.render renderer doc)]
-      (str/replace html #"<script.*?</script>" ""))))
+
+(defn escape-html
+    "Change special characters into HTML character entities."
+    [text state]
+    [(if-not (or (:code state) (:codeblock state))
+       (clojure.string/escape
+         text
+         {\& "&amp;"
+          \< "&lt;"
+          \> "&gt;"
+          \" "&quot;"
+          \' "&#39;"})
+       text) state])
+
+
+(defn heading-anchors [text state]
+  [(or (when (:inline-heading state)
+         (when-let [[level inner] (rest (re-matches #"<h(\d)>(.*)</h\d>" text))]
+           (let [anchor (-> inner str/lower-case (str/replace " " "-"))]
+             (format "<h%s id=\"%s\"><a href=\"#%s\">%s</a></h%s>"
+               level anchor anchor text level))))
+       text)
+   state])
+
+
+(defn render [^String md]
+  (markdown/md-to-html-string md
+    :reference-links? true
+    :footnotes? true
+    :custom-transformers [heading-anchors ; native heading-anchors have no link
+                          #_escape-html]))

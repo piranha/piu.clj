@@ -53,9 +53,12 @@
         id))))
 
 
+(def SQLITE-PATH (or (System/getenv "DBPATH")
+                     "piu.sqlite"))
+
 (mount/defstate db
   :start (->SQL (jdbc/get-datasource {:dbtype "sqlite"
-                                      :dbname "piu.sqlite"})))
+                                      :dbname SQLITE-PATH})))
 
 
 ;;; utils
