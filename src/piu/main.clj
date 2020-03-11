@@ -1,8 +1,7 @@
 (ns piu.main
   (:gen-class)
-  (:import [org.eclipse.jetty.server Server])
   (:require [mount.core :as mount]
-            [ring.adapter.jetty :as jetty]
+            [org.httpkit.server :as httpkit]
 
             [piu.app :as app]))
 
@@ -14,9 +13,8 @@
 
 
 (mount/defstate server
-  :start (jetty/run-jetty app/app {:join? false
-                                   :port  (Integer/parseInt port)})
-  :stop  (.stop ^Server server))
+  :start (httpkit/run-server app/app {:port (Integer/parseInt port)})
+  :stop (server))
 
 
 (defn -main [& args]
