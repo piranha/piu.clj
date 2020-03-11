@@ -21,7 +21,7 @@
             " | "))
 
         (when (= lexer "json")
-          '([:a {:href "?pretty=1"} "pretty-print JSON"]
+          '([:a {:href "?pretty"} "pretty-print JSON"]
             " | "))
 
         (when (#{"md" "markdown" "html"} lexer)

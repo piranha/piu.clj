@@ -1,18 +1,18 @@
 (ns piu.app
-  (:require [clojure.string :as str]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [reitit.ring :as ring]
-            [reitit.ring.middleware.parameters :as params]
+            [ring.middleware.params :as params]
             [ring.middleware.cookies :as cookies]
             [jsonista.core :as json]
-            [buddy.sign.jwt :as jwt]
 
             [piu.store :as store]
             [piu.highlight :as hl]
+            [piu.core.sign :as sign]
             [piu.views.base :as base]
             [piu.views.index :as index]
             [piu.views.show :as show]
-            [piu.views.render :as render]
-            [clojure.java.io :as io]))
+            [piu.views.render :as render]))
 
 
 (set! *warn-on-reflection* true)
@@ -32,17 +32,6 @@
                           (map #(assoc (lang-data %) :lexer %))
                           (sort-by (comp str/lower-case :name))))))
 
-(defn sign [id]
-  (jwt/sign {:id id} SECRET))
-
-
-(defn unsign [s]
-  (try
-    (jwt/unsign s SECRET)
-    (catch Exception e
-      nil)))
-
-
 (defn q? [req k]
   (or (= (:query-string req) k)
       (contains? (:query-params req) k)))
@@ -56,7 +45,7 @@
 (defn show [req]
   (let [id     (-> req :path-params :id)
         data   (store/read store/db id)
-        owner? (-> req :cookies (get id) :value unsign some?)
+        owner? (-> req :cookies (get id) :value sign/decrypt some?)
         lexer  (get (:query-params req) "as" (:lexer data))
         data   (cond-> data
                  (not= lexer (:lexer data))
@@ -112,7 +101,7 @@
         id   (-> req :path-params :id)]
     (cond
       (and id
-           (nil? (-> req :cookies (get id) :value unsign)))
+           (nil? (-> req :cookies (get id) :value sign/decrypt)))
       {:status 403
        :body   "That does not look like your data!\n"}
 
@@ -130,7 +119,7 @@
                                          :lexer lexer
                                          :raw   (get form "data")})]
         {:status  303
-         :cookies {id {:value     (sign id)
+         :cookies {id {:value     (sign/encrypt id)
                        :path      "/"
                        :same-site :strict
                        :max-age   (* 3600 24 7)}}
@@ -141,7 +130,7 @@
   (let [id   (-> req :path-params :id)
         data (store/read store/db id)]
     (if (and data
-             (-> req :cookies (get id) :value unsign some?))
+             (-> req :cookies (get id) :value sign/decrypt some?))
       {:status 200
        :body   (base/wrap
                  (index/form {:lexers @LEXERS
@@ -182,7 +171,7 @@
      :body    src}))
 
 
-(defn router []
+(def router
   (ring/router
     [["/static/*path" resource]
      ["/favicon.ico" (one-file "favicon.ico")]
@@ -200,11 +189,9 @@
     {:conflicts (constantly nil)}))
 
 
-(def app (fn [req]
-           ((ring/ring-handler (router)
-              (ring/routes
-                (ring/redirect-trailing-slash-handler {:method :add})
-                (ring/create-default-handler))
-              {:middleware [cookies/wrap-cookies
-                            params/parameters-middleware]})
-            req)))
+(def app (ring/ring-handler router
+           (ring/routes
+             (ring/redirect-trailing-slash-handler {:method :add})
+             (ring/create-default-handler))
+           {:middleware [cookies/wrap-cookies
+                         params/wrap-params]}))

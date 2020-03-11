@@ -21,7 +21,7 @@ jobs:
         tools-deps: '1.10.1.536'
     - run: gu install native-image
     - run: make compile
-    - uses: actions/upload@v1
+    - uses: actions/upload-artifact@v1
       with:
         name: piu
         path: piu
