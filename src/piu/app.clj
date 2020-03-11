@@ -15,6 +15,9 @@
             [clojure.java.io :as io]))
 
 
+(set! *warn-on-reflection* true)
+
+
 (def SECRET (or (System/getenv "SECRET")
                 (binding [*out* *err*]
                   (print "\nWARNING: set 'SECRET' env variable to be secure\n\n")

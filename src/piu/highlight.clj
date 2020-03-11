@@ -5,13 +5,16 @@
             [clojure.string :as str]))
 
 
+(set! *warn-on-reflection* true)
+
+
 (mount/defstate ctx
   :start (let [ctx       (.build (Context/newBuilder (into-array ["js"])))
                highlight (slurp (io/resource "highlight.min.js"))]
            (.eval ^Context ctx "js" "var window = this;")
            (.eval ^Context ctx "js" highlight)
            ctx)
-  :stop (.close ctx))
+  :stop (.close ^Context ctx))
 
 
 (defn eval-js [s]

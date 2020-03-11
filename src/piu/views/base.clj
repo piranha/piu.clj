@@ -2,6 +2,7 @@
   (:require [hiccup.core :as hi]
             [hiccup.page :refer [doctype]]))
 
+(set! *warn-on-reflection* true)
 
 (defn head []
   (hi/html

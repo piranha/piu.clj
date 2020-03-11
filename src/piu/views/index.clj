@@ -2,6 +2,7 @@
   (:require [hiccup.core :as hi]
             [piu.views.base :as base]))
 
+(set! *warn-on-reflection* true)
 
 (defn form [{:keys [raw lexers lexer]}]
   (hi/html

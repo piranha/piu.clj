@@ -1,6 +1,6 @@
 {:paths ["src" "resources"]
  :deps
- {org.clojure/clojure               {:mvn/version "1.10.1"}
+ {org.clojure/clojure               {:mvn/version "1.10.2-alpha1"}
   ring                              {:mvn/version "1.8.0"}
   metosin/reitit-core               {:mvn/version "0.4.2"}
   metosin/reitit-ring               {:mvn/version "0.4.2"}
@@ -27,9 +27,13 @@
                      "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
   :native {:main-opts ["-m clj.native-image piu.main"
+                       "--language:js"
                        ;; optional native image name override
                        "-H:Name=piu"
+                       "-H:+TraceClassInitialization"
+                       "-H:+ReportExceptionStackTraces"
                        "--initialize-at-build-time"
+                       "--report-unsupported-elements-at-runtime"
                        "--no-server"]
            :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                        "-Dclojure.spec.skip-macros=true"]

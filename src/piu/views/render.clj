@@ -18,6 +18,8 @@
 
             [piu.views.base :as base]))
 
+(set! *warn-on-reflection* true)
+
 
 (defn t [html]
   (hi/html
@@ -48,7 +50,6 @@
                     (SuperscriptExtension/create)
                     (TocExtension/create)
                     (TypographicExtension/create)])
-                 (.set HtmlRenderer/INDENT_SIZE (int 2))
                  (.set HtmlRenderer/PERCENT_ENCODE_URLS true)
                  (.set TablesExtension/COLUMN_SPANS false)
                  (.set TablesExtension/APPEND_MISSING_COLUMNS true)
@@ -56,7 +57,7 @@
                  (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true))
       parser   (.build (Parser/builder opts))
       renderer (.build (HtmlRenderer/builder opts))]
-  (defn render [md]
+  (defn render [^String md]
     (let [doc  (.parse parser md)
           html (.render renderer doc)]
       (str/replace html #"<script.*?</script>" ""))))

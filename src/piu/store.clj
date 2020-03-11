@@ -1,12 +1,15 @@
 (ns piu.store
   (:refer-clojure :exclude [read])
-  (:import [java.time Instant ZonedDateTime LocalDateTime ZoneId]
+  (:import [java.time Instant ZonedDateTime LocalDateTime ZoneId ZoneRegion]
            [java.time.format DateTimeFormatter])
   (:require [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]
             [mount.core :as mount]
 
             [piu.highlight :as hl]))
+
+
+(set! *warn-on-reflection* true)
 
 
 (declare fill-cache generate)
@@ -26,7 +29,7 @@
           ["select id, created, lexer, raw, html from piu where id = ?" id]
           {:builder-fn rs/as-unqualified-lower-maps})
         (update :created #(-> (LocalDateTime/parse % sqlite-dt)
-                              (.atZone gmt)))
+                              (.atZone ^ZoneRegion gmt)))
         (fill-cache this)))
   (write [this data]
     (assert (and (:lexer data) (:raw data))
@@ -38,7 +41,7 @@
                                    data
                                    (hl/hl (:lexer data) raw))
             now                  (-> (ZonedDateTime/now)
-                                     (.withZoneSameInstant gmt)
+                                     (.withZoneSameInstant ^ZoneRegion gmt)
                                      (.format sqlite-dt))]
         (jdbc/execute-one! tx
           ["INSERT INTO piu (id, lexer, raw, html, created)

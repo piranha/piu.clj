@@ -3,13 +3,14 @@
   (:require [hiccup.core :as hi]
             [piu.views.base :as base]))
 
+(set! *warn-on-reflection* true)
 
 (def iso8601 DateTimeFormatter/ISO_OFFSET_DATE_TIME)
 (def rfc1123 DateTimeFormatter/RFC_1123_DATE_TIME)
 
 
 (defn t [{:keys [data owner? lexer lexers]}]
-  (let [lines (.split (:html data) "\n")]
+  (let [lines (.split ^String (:html data) "\n")]
     (hi/html
       [:div.meta
        [:span.right
@@ -32,8 +33,8 @@
         [:a {:href "raw/"} "raw"]]
 
        [:span "Pasted at "
-        [:time {:datetime (. iso8601 format (:created data))}
-         (. rfc1123 format (:created data))]
+        [:time {:datetime (.format ^DateTimeFormatter iso8601 (:created data))}
+         (.format ^DateTimeFormatter rfc1123 (:created data))]
         " | Highlighted as "
         lexer]]
 
