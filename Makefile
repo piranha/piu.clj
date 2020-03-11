@@ -1,10 +1,9 @@
 VERSION = $(shell cat VERSION)
+export JAVA_HOME ?= $(HOME)/var/graalvm-ce-java11-20.0.0/Contents/Home
+#GRAALVM_HOME ?= $(HOME)/var/graalvm-ce-java11-20.0.0/Contents/Home
 
-run: export JAVA_HOME = $(HOME)/var/graalvm-ce-java11-20.0.0/Contents/Home
 run:
 	clj -A:dev
 
-compile: export GRAALVM_HOME = $(HOME)/var/graalvm-ce-java11-20.0.0/Contents/Home
-compile: export JAVA_HOME = $(HOME)/var/graalvm-ce-java11-20.0.0/Contents/Home
 compile:
-	clj -A:native
+	clojure -A:native
