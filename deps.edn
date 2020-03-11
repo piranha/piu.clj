@@ -26,6 +26,10 @@
                      "-m nrepl.cmdline -i"
                      "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
+  :uber {:deps      {uberdeps {:mvn/version "0.1.8"}}
+         :main-opts ["-m uberdeps.uberjar"
+                     "--target target/piu.jar"]}
+
   :native {:main-opts ["-m clj.native-image piu.main"
                        "--language:js"
                        ;; optional native image name override

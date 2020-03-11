@@ -10,11 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
-      env:
-        cache-name: cache-m2
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/deps.edn') }}
+        key: m2-${{ hashFiles('**/deps.edn') }}
     - uses: DeLaGuardo/setup-graalvm@3
       with:
         graalvm-version: '19.3.0.java11'
