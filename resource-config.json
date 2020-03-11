@@ -1,0 +1,7 @@
+{"resources": [
+    {"pattern": "public/.*"},
+    {"pattern": "about.md"},
+    {"pattern": "highlight.min.js"},
+    {"pattern": "piu.py.tpl"},
+    {"pattern": "simplelogger.properties"}
+]}
