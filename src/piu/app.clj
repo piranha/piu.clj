@@ -4,7 +4,8 @@
             [ring.util.response :as response]
             [ring.middleware.params :as params]
             [ring.middleware.cookies :as cookies]
-            [jsonista.core :as json]
+            #_[jsonista.core :as json]
+            [clojure.data.json :as j]
 
             [piu.store :as store]
             [piu.highlight :as hl]
@@ -38,9 +39,10 @@
       (contains? (:query-params req) k)))
 
 
-(def mapper (json/object-mapper {:pretty true}))
+;(def mapper (json/object-mapper {:pretty true}))
 (defn pretty-json [s]
-  (-> s (json/read-value) (json/write-value-as-string mapper)))
+  #_(-> s (json/read-value) (json/write-value-as-string mapper))
+  (with-out-str (-> s j/read-str j/pprint)))
 
 
 (defn show [req]
