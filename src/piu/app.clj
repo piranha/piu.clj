@@ -1,7 +1,7 @@
 (ns piu.app
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [reitit.ring :as ring]
+            [ring.util.response :as response]
             [ring.middleware.params :as params]
             [ring.middleware.cookies :as cookies]
             [jsonista.core :as json]
@@ -9,6 +9,7 @@
             [piu.store :as store]
             [piu.highlight :as hl]
             [piu.core.sign :as sign]
+            [piu.core.route :as route]
             [piu.views.base :as base]
             [piu.views.index :as index]
             [piu.views.show :as show]
@@ -146,7 +147,9 @@
    :body    (base/wrap (render/render (slurp (io/resource "about.md"))))})
 
 
-(def resource (ring/create-resource-handler {:parameter :path}))
+(defn resource [req]
+  (response/resource-response (-> req :path-params :path) {:root "public"}))
+
 (defn one-file [path]
   (fn [req]
     (resource (assoc req :path-params {:path path}))))
@@ -172,26 +175,38 @@
 
 
 (def router
-  (ring/router
-    [["/static/*path" resource]
-     ["/favicon.ico" (one-file "favicon.ico")]
-     ["/robots.txt" (one-file "robots.txt")]
-     ["/about/" about]
-     ["/piu" piu-py]
-     ["/piu.el" (one-file "piu.el")]
-     ["/:id/" show]
-     ["/:id/edit/" {:get  edit
-                    :post create}]
-     ["/:id/raw/" raw]
-     ["/:id/render/" render]
-     ["/" {:get  index
-           :post create}]]
-    {:conflicts (constantly nil)}))
+  (route/router
+    [[#"/static/(?<path>.+)" resource]
+     [#"/favicon.ico" (one-file "favicon.ico")]
+     [#"/robots.txt" (one-file "robots.txt")]
+     [#"/about/" about]
+     [#"/piu" piu-py]
+     [#"/piu.el" (one-file "piu.el")]
+     [#"/(?<id>[^/]+)/" show]
+     [#"/(?<id>[^/]+)/edit/" {:get edit
+                              :post create}]
+     [#"/(?<id>[^/]+)/raw/" raw]
+     [#"/(?<id>[^/]+)/render/" render]
+     [#"/" {:get index
+            :post create}]]))
 
 
-(def app (ring/ring-handler router
-           (ring/routes
-             (ring/redirect-trailing-slash-handler {:method :add})
-             (ring/create-default-handler))
-           {:middleware [cookies/wrap-cookies
-                         params/wrap-params]}))
+(def middleware [cookies/wrap-cookies
+                 params/wrap-params])
+
+
+(let [mw (apply comp middleware)]
+  (defn app [req]
+    (let [[req func] (route/match router req)
+          res        (when func ((mw func) req))]
+
+      (cond
+        res res
+
+        (some? (route/match router (update req :uri str "/")))
+        {:status  301
+         :headers {"location" (str (:uri req) "/")}}
+
+        :else
+        {:status 404
+         :body   "Not Found"}))))
