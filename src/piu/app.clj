@@ -91,7 +91,10 @@
   {:status  200
    :headers {"content-type" "text/html; charset=utf-8"}
    :body    (base/wrap
-              (index/form {:lexers @LEXERS}))})
+              (index/form {:lexer (or (get (:query-params req) "lexer")
+                                      (:value (get (:cookies req) "lexer"))
+                                      "guess")
+                           :lexers @LEXERS}))})
 
 
 (defn create [req]
@@ -117,10 +120,14 @@
                                          :lexer lexer
                                          :raw   (get form "data")})]
         {:status  303
-         :cookies {id {:value     (sign/encrypt id)
-                       :path      "/"
-                       :same-site :strict
-                       :max-age   (* 3600 24 7)}}
+         :cookies {id      {:value     (sign/encrypt id)
+                            :path      "/"
+                            :same-site :strict
+                            :max-age   (* 3600 24 7)}
+                   "lexer" {:value     lexer
+                            :path      "/"
+                            :same-site :strict
+                            :max-age   (* 3600 24 365)}}
          :headers {"location" (format "/%s/" id)}}))))
 
 
