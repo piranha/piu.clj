@@ -50,14 +50,13 @@
            lines)]]]
 
       [:span.note
-       "&uarr; Click line number to highlight; "
-       "drag to highlight range; hold shift to select few"]
+       "&uarr; Click line number to highlight; hold shift to highlight range"]
 
       [:script
        "var lexers = $id('lexers');
-      var currentLexer = lexers.value;
-      lexers.addEventListener('change', function(e) {
-        if (currentLexer != lexers.value) {
-          window.location.search = '?as=' + encodeURIComponent(lexers.value);
-        }
-      });"])))
+        var currentLexer = lexers.value;
+        lexers.addEventListener('change', function(e) {
+          if (currentLexer != lexers.value) {
+            window.location.search = '?as=' + encodeURIComponent(lexers.value);
+          }
+        });"])))

@@ -4,7 +4,7 @@
             [ring.util.response :as response]
             [ring.middleware.params :as params]
             [ring.middleware.cookies :as cookies]
-            #_[jsonista.core :as json]
+            [ring.middleware.content-type :as ct]
             [clojure.data.json :as j]
 
             [piu.store :as store]
@@ -20,11 +20,6 @@
 (set! *warn-on-reflection* true)
 
 
-(def SECRET (or (System/getenv "SECRET")
-                (binding [*out* *err*]
-                  (print "\nWARNING: set 'SECRET' env variable to be secure\n\n")
-                  "epic-secret")))
-
 (def SPAM-RE #"^comment\d+,")
 (def LEXERS (delay (let [lang-data (hl/js "l => {
                                              var x = hljs.getLanguage(l);
@@ -39,9 +34,7 @@
       (contains? (:query-params req) k)))
 
 
-;(def mapper (json/object-mapper {:pretty true}))
 (defn pretty-json [s]
-  #_(-> s (json/read-value) (json/write-value-as-string mapper))
   (with-out-str (-> s j/read-str j/pprint)))
 
 
@@ -59,7 +52,7 @@
                  (assoc :html (:html (hl/hl lexer (pretty-json (:raw data))))))]
     (if data
       {:status  200
-       :headers {"content-type" "text/html"}
+       :headers {"content-type" "text/html; charset=utf-8"}
        :body    (base/wrap
                   (show/t {:data   data
                            :owner? owner?
@@ -74,7 +67,7 @@
         data (store/read store/db id)]
     (if data
       {:status  200
-       :headers {"content-type" "text/html"}
+       :headers {"content-type" "text/html; charset=utf-8"}
        :body    (render/t (render/render (:raw data)))}
       {:status 404
        :body   "Not Found"})))
@@ -89,14 +82,16 @@
        :body    (if (q? req "more")
                   (pr-str data)
                   (:raw data))}
-      {:status  307 ;; temporary redirect
-       :headers {"location" "/"}})))
+      {:status  404
+       :headers {"content-type" "text/plain; charset=utf-8"}
+       :body "Not Found"})))
 
 
 (defn index [req]
-  {:status 200
-   :body   (base/wrap
-             (index/form {:lexers @LEXERS}))})
+  {:status  200
+   :headers {"content-type" "text/html; charset=utf-8"}
+   :body    (base/wrap
+              (index/form {:lexers @LEXERS}))})
 
 
 (defn create [req]
@@ -140,17 +135,19 @@
                               :lexer  (:lexer data)
                               :raw    (:raw data)}))}
       {:status 404
+       :headers {"content-type" "text/plain; charset=utf-8"}
        :body "Not Found"})))
 
 
 (defn about [req]
   {:status  200
-   :headers {"content-type" "text/html"}
+   :headers {"content-type" "text/html; charset=utf-8"}
    :body    (base/wrap (render/render (slurp (io/resource "about.md"))))})
 
 
 (defn resource [req]
   (response/resource-response (-> req :path-params :path) {:root "public"}))
+
 
 (defn one-file [path]
   (fn [req]
@@ -194,7 +191,8 @@
 
 
 (def middleware [cookies/wrap-cookies
-                 params/wrap-params])
+                 params/wrap-params
+                 ct/wrap-content-type])
 
 
 (let [mw (apply comp middleware)]

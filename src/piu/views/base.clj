@@ -11,7 +11,7 @@
      [:title "paste.in.ua"]
      [:link {:rel "stylesheet" :href "/static/main.css"}]
      [:link {:rel "stylesheet" :href "/static/xcode.css"}]
-     [:script {:src "/static/main.js"}]]))
+     [:script {:src "/static/all.js"}]]))
 
 
 (defn footer []
