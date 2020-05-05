@@ -12,15 +12,19 @@
   (.getBytes s "UTF-8"))
 
 
-(def SECRET (or (System/getenv "SECRET")
-                (binding [*out* *err*]
-                  (print "\nWARNING: set 'SECRET' env variable to be secure\n\n")
-                  "epic-secret")))
+(def secret
+  (memoize
+    (fn []
+      (b
+        (or (System/getenv "SECRET")
+            (binding [*out* *err*]
+              (print "\nWARNING: set 'SECRET' env variable to be secure\n\n")
+              "epic-secret"))))))
 
 
 (def ^SecretKeySpec KEY
   (let [sha (MessageDigest/getInstance "SHA-1")
-        ba  (->> (.digest sha (b SECRET))
+        ba  (->> (.digest sha (secret))
                  (take 16)
                  byte-array)]
     (SecretKeySpec. ba "AES")))

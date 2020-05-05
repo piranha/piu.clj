@@ -9,15 +9,17 @@
 (set! *warn-on-reflection* true)
 
 
-(def port (or (System/getenv "PORT") "8000"))
+(defn port []
+  (Integer/parseInt
+    (or (System/getenv "PORT") "8000")))
 
 
 (mount/defstate server
-  :start (httpkit/run-server app/app {:port (Integer/parseInt port)})
+  :start (httpkit/run-server app/app {:port (port)})
   :stop (server))
 
 
 (defn -main [& args]
   (println "Starting...")
   (mount/start)
-  (println "Started on port" port))
+  (println "Started on port" (port)))
