@@ -24,7 +24,8 @@ native:
 		--no-server \
 		--no-fallback \
 		--report-unsupported-elements-at-runtime \
-		--language:js
+		--language:js \
+		-H:JNIConfigurationFiles=jni.json
 
 compile:
 #	$(JAVA_HOME)/bin/javac -cp $(JAVA_HOME)/jre/lib/svm/builder/svm.jar resources/CutOffCoreServicesDependencies.java

@@ -1,15 +1,15 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
  {org.clojure/clojure       {:mvn/version "1.10.2-alpha1"}
-  ring/ring-core            {:mvn/version "1.8.0"}
+  ring/ring-core            {:mvn/version "1.8.1"}
   http-kit                  {:mvn/version "2.3.0"}
   org.clojure/data.json     {:mvn/version "1.0.0"}
   mount                     {:mvn/version "0.1.16"}
   hiccup                    {:mvn/version "1.0.5"}
   net.solovyov/markdown-clj {:mvn/version "1.10.1-1"
                              :exclusions  [org.clojure/tools.reader]}
-  seancorfield/next.jdbc    {:mvn/version "1.0.395"}
-  org.xerial/sqlite-jdbc    {:mvn/version "3.30.1"}
+  seancorfield/next.jdbc    {:mvn/version "1.0.445"}
+  org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   org.slf4j/slf4j-api       {:mvn/version "1.7.30"}
   org.slf4j/slf4j-simple    {:mvn/version "1.7.30"}}
 
