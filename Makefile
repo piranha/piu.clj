@@ -14,6 +14,7 @@ native:
 		-H:Name=piu \
 		-H:+TraceClassInitialization \
 		-H:+ReportExceptionStackTraces \
+		-H:+RemoveSaturatedTypeFlows \
 		-J-Dclojure.spec.skip-macros=true \
 		-J-Dclojure.compiler.direct-linking=true \
 		--initialize-at-build-time \

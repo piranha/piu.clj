@@ -25,6 +25,8 @@
                      "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
   :uber {:deps      {uberdeps {:mvn/version "0.1.8"}}
+         :jvm-opts ["-Dclojure.compiler.direct-linking=true"
+                    "-Dclojure.spec.skip-macros=true"]
          :main-opts ["-m uberdeps.uberjar"
                      "--target target/piu.jar"
                      "--main-class piu.main"]}
