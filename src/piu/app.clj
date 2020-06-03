@@ -6,8 +6,10 @@
             [ring.middleware.cookies :as cookies]
             [ring.middleware.content-type :as ct]
             [clojure.data.json :as j]
+            [mount.core :as mount]
 
             [piu.store :as store]
+            [piu.store.fstore :as fstore]
             [piu.highlight :as hl]
             [piu.core.sign :as sign]
             [piu.core.route :as route]
@@ -18,6 +20,15 @@
 
 
 (set! *warn-on-reflection* true)
+
+
+(defn dbpath []
+  (or (System/getenv "DBPATH")
+      "piu.sqlite"))
+
+
+(mount/defstate db
+  :start (fstore/create (dbpath)))
 
 
 (def SPAM-RE #"^comment\d+,")
@@ -40,7 +51,7 @@
 
 (defn show [req]
   (let [id     (-> req :path-params :id)
-        data   (store/read store/db id)
+        data   (store/read db id)
         owner? (-> req :cookies (get id) :value sign/decrypt some?)
         lexer  (get (:query-params req) "as" (:lexer data))
         data   (cond-> data
@@ -59,12 +70,12 @@
                            :lexer  lexer
                            :lexers @LEXERS}))}
       {:status 404
-       :body "Not Found"})))
+       :body   "Not Found"})))
 
 
 (defn render [req]
   (let [id   (-> req :path-params :id)
-        data (store/read store/db id)]
+        data (store/read db id)]
     (if data
       {:status  200
        :headers {"content-type" "text/html; charset=utf-8"}
@@ -75,7 +86,7 @@
 
 (defn raw [req]
   (let [id   (-> req :path-params :id)
-        data (store/read store/db id)]
+        data (store/read db id)]
     (if data
       {:status  200
        :headers {"content-type" "text/plain; charset=utf-8"}
@@ -116,9 +127,12 @@
 
       :else
       (let [lexer (get form "lexer" "guess")
-            id    (store/write store/db {:id    id
-                                         :lexer lexer
-                                         :raw   (get form "data")})]
+            raw   (get form "data")
+            res   (hl/hl lexer raw)
+            id    (store/write db {:id    id
+                                   :lexer (:lexer res)
+                                   :raw   raw
+                                   :html  (:html res)})]
         {:status  303
          :cookies {id      {:value     (sign/encrypt id)
                             :path      "/"
@@ -133,7 +147,7 @@
 
 (defn edit [req]
   (let [id   (-> req :path-params :id)
-        data (store/read store/db id)]
+        data (store/read db id)]
     (if (and data
              (-> req :cookies (get id) :value sign/decrypt some?))
       {:status 200

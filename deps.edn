@@ -8,8 +8,9 @@
   hiccup                    {:mvn/version "1.0.5"}
   net.solovyov/markdown-clj {:mvn/version "1.10.1-1"
                              :exclusions  [org.clojure/tools.reader]}
-  seancorfield/next.jdbc    {:mvn/version "1.0.445"}
-  org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
+  seancorfield/next.jdbc    {:mvn/version "1.0.462"}
+  ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
+  com.brunobonacci/mulog    {:mvn/version "0.2.0"}
   org.slf4j/slf4j-api       {:mvn/version "1.7.30"}
   org.slf4j/slf4j-simple    {:mvn/version "1.7.30"}}
 
@@ -17,16 +18,17 @@
             "-Djava.net.preferIPv4Addresses=true"]
 
  :aliases
- {:dev {:extra-deps {nrepl/nrepl       {:mvn/version "0.6.0"}
-                     cider/cider-nrepl {:mvn/version "0.22.4"}
-                     refactor-nrepl    {:mvn/version "2.5.0"}}
+ {:dev {:extra-deps {nrepl                   {:mvn/version "0.7.0"}
+                     cider/cider-nrepl       {:mvn/version "0.25.0"}
+                     refactor-nrepl          {:mvn/version "2.5.0"}
+                     clj-commons/pomegranate {:mvn/version "1.2.0"}}
         :main-opts  ["-i dev/user.clj"
                      "-m nrepl.cmdline -i"
                      "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
-  :uber {:deps      {uberdeps {:mvn/version "0.1.8"}}
-         :jvm-opts ["-Dclojure.compiler.direct-linking=true"
-                    "-Dclojure.spec.skip-macros=true"]
+  :uber {:deps      {uberdeps {:mvn/version "0.1.10"}}
+         :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
+                     "-Dclojure.spec.skip-macros=true"]
          :main-opts ["-m uberdeps.uberjar"
                      "--target target/piu.jar"
                      "--main-class piu.main"]}

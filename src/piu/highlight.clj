@@ -44,19 +44,19 @@
    otherwise throws."
   [^Value v]
   (cond
-    (.isNull v) nil
-    (.isHostObject v) (.asHostObject v)
-    (.isBoolean v) (.asBoolean v)
-    (.isString v) (.asString v)
-    (.isNumber v) (.as v Number)
-    (.canExecute v) (reify-ifn v)
+    (.isNull v)           nil
+    (.isHostObject v)     (.asHostObject v)
+    (.isBoolean v)        (.asBoolean v)
+    (.isString v)         (.asString v)
+    (.isNumber v)         (.as v Number)
+    (.canExecute v)       (reify-ifn v)
     (.hasArrayElements v) (into []
-                                (for [i (range (.getArraySize v))]
-                                  (value->clj (.getArrayElement v i))))
-    (.hasMembers v) (into {}
-                          (for [k (.getMemberKeys v)]
-                            [(keyword k) (value->clj (.getMember v k))]))
-    :else (throw (Exception. "Unsupported value"))))
+                            (for [i (range (.getArraySize v))]
+                              (value->clj (.getArrayElement v i))))
+    (.hasMembers v)       (into {}
+                            (for [k (.getMemberKeys v)]
+                        [(keyword k) (value->clj (.getMember v k))]))
+    :else                 (throw (Exception. "Unsupported value"))))
 
 
 (def js (comp value->clj eval-js))

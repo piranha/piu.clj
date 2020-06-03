@@ -2,11 +2,17 @@
   (:gen-class)
   (:require [mount.core :as mount]
             [org.httpkit.server :as httpkit]
+            [com.brunobonacci.mulog :as u]
 
             [piu.app :as app]))
 
 
 (set! *warn-on-reflection* true)
+
+
+(mount/defstate logging
+  :start (u/start-publisher! {:type :console})
+  :stop (logging))
 
 
 (defn port []

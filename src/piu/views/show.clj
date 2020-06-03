@@ -8,9 +8,8 @@
 (def iso8601 DateTimeFormatter/ISO_OFFSET_DATE_TIME)
 (def rfc1123 DateTimeFormatter/RFC_1123_DATE_TIME)
 
-
 (defn t [{:keys [data owner? lexer lexers]}]
-  (let [lines (.split ^String (:html data) "\n")]
+ (let [lines (.split ^String (:html data) "\n")]
     (hi/html
       [:div.meta
        [:span.right
@@ -59,4 +58,9 @@
           if (currentLexer != lexers.value) {
             window.location.search = '?as=' + encodeURIComponent(lexers.value);
           }
+        });
+
+        [].forEach.call($qsa('time'), function(t) {
+          var d = new Date(t.dateTime);
+          t.innerText = d.toLocaleString();
         });"])))
