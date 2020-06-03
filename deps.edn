@@ -10,7 +10,6 @@
                              :exclusions  [org.clojure/tools.reader]}
   seancorfield/next.jdbc    {:mvn/version "1.0.462"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
-  com.brunobonacci/mulog    {:mvn/version "0.2.0"}
   org.slf4j/slf4j-api       {:mvn/version "1.7.30"}
   org.slf4j/slf4j-simple    {:mvn/version "1.7.30"}}
 

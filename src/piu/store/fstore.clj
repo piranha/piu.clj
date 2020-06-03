@@ -4,8 +4,8 @@
            [java.util.zip GZIPOutputStream GZIPInputStream])
   (:require [clojure.string :as str]
             [clojure.java.io :as io]
-            [com.brunobonacci.mulog :as u]
 
+            [piu.log :as log]
             [piu.store :as store]
             [piu.tnetstrings :as tn]))
 
@@ -73,7 +73,7 @@
                           io/output-stream
                           GZIPOutputStream.)]
         (.write out (.getBytes s "UTF-8"))
-        (u/log ::write :id id :length (count raw))
+        (log/info ::write {:id id :length (count raw)})
         id))))
 
 
