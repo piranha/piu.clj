@@ -1,5 +1,5 @@
 (ns piu.store.fstore
-  (:import [java.nio.file Paths]
+  (:import [java.nio.file Path Paths]
            [java.time Instant ZoneId ZonedDateTime]
            [java.util.zip GZIPOutputStream GZIPInputStream])
   (:require [clojure.string :as str]
@@ -13,6 +13,12 @@
 (set! *warn-on-reflection* true)
 
 (def utc (ZoneId/of "UTC"))
+
+
+(extend-protocol io/Coercions
+  Path
+  (as-file [this] (.toFile this))
+  (as-url [this] (.. this (toFile) (toURL))))
 
 
 (defn itempath [path id]
