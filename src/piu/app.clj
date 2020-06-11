@@ -166,6 +166,13 @@
    :body    (base/wrap (render/render (slurp (io/resource "about.md"))))})
 
 
+(defmethod response/resource-data :resource
+  [^java.net.URL url]
+  (let [conn (.openConnection url)]
+    {:content        (.getInputStream conn)
+     :content-length (let [len (.getContentLength conn)] (if-not (pos? len) len))}))
+
+
 (defn resource [req]
   (response/resource-response (-> req :path-params :path) {:root "public"}))
 
@@ -190,7 +197,7 @@
                    (str/replace #"#lexers#" lexers)
                    (str/replace #"#extmap#" extmap))]
     {:status  200
-     :headers {"content-type" "text/html"}
+     :headers {"content-type" "text/plain"}
      :body    src}))
 
 
