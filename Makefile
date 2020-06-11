@@ -20,6 +20,7 @@ native:
 		--initialize-at-build-time \
 		-H:Log=registerResource: \
 		-H:EnableURLProtocols=http,https \
+		-H:ResourceConfigurationFiles=resource-config.json \
 		--enable-all-security-services \
 		--no-server \
 		--no-fallback \
