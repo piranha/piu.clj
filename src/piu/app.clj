@@ -150,14 +150,15 @@
         data (store/read db id)]
     (if (and data
              (-> req :cookies (get id) :value sign/decrypt some?))
-      {:status 200
-       :body   (base/wrap
-                 (index/form {:lexers @LEXERS
-                              :lexer  (:lexer data)
-                              :raw    (:raw data)}))}
-      {:status 404
+      {:status  200
+       :headers {"content-type" "text/html; charset=utf-8"}
+       :body    (base/wrap
+                  (index/form {:lexers @LEXERS
+                               :lexer  (:lexer data)
+                               :raw    (:raw data)}))}
+      {:status  404
        :headers {"content-type" "text/plain; charset=utf-8"}
-       :body "Not Found"})))
+       :body    "Not Found"})))
 
 
 (defn about [req]
