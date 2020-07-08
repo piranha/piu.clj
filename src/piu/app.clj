@@ -32,13 +32,15 @@
 
 
 (def SPAM-RE #"^comment\d+,")
-(def LEXERS (delay (let [lang-data (hl/js "l => {
-                                             var x = hljs.getLanguage(l);
-                                             return {name: x.name, aliases: x.aliases};
-                                           }")]
-                     (->> (hl/js "hljs.listLanguages()")
-                          (map #(assoc (lang-data %) :lexer %))
-                          (sort-by (comp str/lower-case :name))))))
+
+(def get-lexers-js
+  "hljs.listLanguages().map(l => {
+    var x = hljs.getLanguage(l);
+    return {lexer: l, name: x.name, aliases: x.aliases};
+   });")
+(def LEXERS (delay (let [lang-data (hl/js get-lexers-js)]
+                     (sort-by (comp str/lower-case :name) lang-data))))
+
 
 (defn q? [req k]
   (or (= (:query-string req) k)
