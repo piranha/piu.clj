@@ -53,7 +53,7 @@
 
 
 (defn render [^String md]
-  (markdown/md-to-html-string md
+  (markdown/md-to-html md
     :reference-links? true
     :footnotes? true
     :custom-transformers [heading-anchors ; native heading-anchors have no link
