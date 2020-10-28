@@ -1,5 +1,5 @@
 VERSION = $(shell cat VERSION)
-export JAVA_HOME ?= $(HOME)/var/graalvm-ce-java11-20.1.0/Contents/Home
+export JAVA_HOME ?= $(HOME)/var/graalvm-ce-java11-20.2.0/Contents/Home
 export GRAALVM_HOME ?= $(JAVA_HOME)
 
 run:

@@ -16,7 +16,7 @@
             [piu.views.base :as base]
             [piu.views.index :as index]
             [piu.views.show :as show]
-            [piu.views.render :as render]))
+            [piu.views.markdown :as markdown]))
 
 
 (set! *warn-on-reflection* true)
@@ -81,7 +81,7 @@
     (if data
       {:status  200
        :headers {"content-type" "text/html; charset=utf-8"}
-       :body    (render/t (render/render (:raw data)))}
+       :body    (markdown/t (markdown/render (:raw data)))}
       {:status 404
        :body   "Not Found"})))
 
@@ -166,7 +166,7 @@
 (defn about [req]
   {:status  200
    :headers {"content-type" "text/html; charset=utf-8"}
-   :body    (base/wrap (render/render (slurp (io/resource "about.md"))))})
+   :body    (base/wrap (markdown/render (slurp (io/resource "about.md"))))})
 
 
 (defmethod response/resource-data :resource

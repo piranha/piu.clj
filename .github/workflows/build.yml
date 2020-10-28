@@ -15,7 +15,7 @@ jobs:
         key: m2-${{ hashFiles('**/deps.edn') }}
     - uses: DeLaGuardo/setup-graalvm@3
       with:
-        graalvm-version: '20.2.0.java11'
+        graalvm-version: '20.1.0.java11'
     - uses: DeLaGuardo/setup-clojure@2.0
       with:
         tools-deps: '1.10.1.645'
