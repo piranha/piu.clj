@@ -42,7 +42,6 @@
                        "--language:js"
                        ;; optional native image name override
                        "-H:Name=piu"
-                       "-H:+TraceClassInitialization"
                        "-H:+ReportExceptionStackTraces"
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"

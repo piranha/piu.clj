@@ -13,15 +13,15 @@ jobs:
       with:
         path: ~/.m2
         key: m2-${{ hashFiles('**/deps.edn') }}
-    - uses: DeLaGuardo/setup-graalvm@3
+    - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '20.1.0.java11'
-    - uses: DeLaGuardo/setup-clojure@2.0
+        graalvm-version: '20.3.0.java11'
+    - uses: DeLaGuardo/setup-clojure@master
       with:
-        tools-deps: '1.10.1.645'
+        tools-deps: '1.10.1.727'
     - run: gu install native-image
     - run: make compile
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2.2.1
       with:
         name: piu
         path: piu

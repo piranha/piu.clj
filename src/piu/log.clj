@@ -21,7 +21,6 @@
     (printf "%-5s %s:%s %s %s\n" (.toUpperCase (name level)) file line event (pr-str @data))))
 
 
-
 (defn- log-form [level event data form]
   `(-log *logger
          ~level

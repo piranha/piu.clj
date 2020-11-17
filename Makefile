@@ -12,7 +12,6 @@ uber:
 native:
 	$(GRAALVM_HOME)/bin/native-image -jar target/piu.jar \
 		-H:Name=piu \
-		-H:+TraceClassInitialization \
 		-H:+ReportExceptionStackTraces \
 		-H:+RemoveSaturatedTypeFlows \
 		-J-Dclojure.spec.skip-macros=true \
