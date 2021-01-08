@@ -21,7 +21,9 @@ jobs:
         tools-deps: '1.10.1.727'
     - run: gu install native-image
     - run: make compile
-    - uses: actions/upload-artifact@v2.2.1
+    - uses: svenstaro/upload-release-action@v2
       with:
-        name: piu
-        path: piu
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: piu
+        asset_name: piu-linux-amd64
+        tag: ${{ github.ref }}
