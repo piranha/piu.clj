@@ -58,11 +58,14 @@
         lexer  (get (:query-params req) "as" (:lexer data))
         data   (cond-> data
                  (not= lexer (:lexer data))
-                 (assoc :html (:html (hl/hl lexer (:raw data))))
+                 (merge (hl/hl lexer (:raw data)))
 
                  (and (= lexer "json")
                       (q? req "pretty"))
-                 (assoc :html (:html (hl/hl lexer (pretty-json (:raw data))))))]
+                 (merge (hl/hl lexer (pretty-json (:raw data)))))
+        data   (if (:lines data)
+                 data
+                 (assoc data :lines (hl/make-lines (:html data))))]
     (if data
       {:status  200
        :headers {"content-type" "text/html; charset=utf-8"}
@@ -134,7 +137,8 @@
             id    (store/write db {:id    id
                                    :lexer (:lexer res)
                                    :raw   raw
-                                   :html  (:html res)})]
+                                   :html  (:html res)
+                                   :lines (:lines res)})]
         {:status  303
          :cookies {id      {:value     (sign/encrypt id)
                             :path      "/"

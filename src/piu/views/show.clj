@@ -9,50 +9,49 @@
 (def rfc1123 DateTimeFormatter/RFC_1123_DATE_TIME)
 
 (defn t [{:keys [data owner? lexer lexers]}]
- (let [lines (.split ^String (:html data) "\n")]
-    (hi/html
-      [:div.meta
-       [:span.right
-        (base/lexer-select lexer lexers) " "
+  (hi/html
+    [:div.meta
+     [:span.right
+      (base/lexer-select lexer lexers) " "
 
-        (when owner?
-          '([:a {:href "edit/"} "edit"]
-            " | "))
+      (when owner?
+        '([:a {:href "edit/"} "edit"]
+          " | "))
 
-        (when (= lexer "json")
-          '([:a {:href "?pretty"} "pretty-print JSON"]
-            " | "))
+      (when (= lexer "json")
+        '([:a {:href "?pretty"} "pretty-print JSON"]
+          " | "))
 
-        (when (#{"md" "markdown" "html"} lexer)
-          '([:a {:href "render/"} "render content as HTML"]
-            " | "))
+      (when (#{"md" "markdown" "html"} lexer)
+        '([:a {:href "render/"} "render content as HTML"]
+          " | "))
 
-        [:a#wrap {:href "#"} "toggle wrap"]
-        " | "
-        [:a {:href "raw/"} "raw"]]
+      [:a#wrap {:href "#"} "toggle wrap"]
+      " | "
+      [:a {:href "raw/"} "raw"]]
 
-       [:span "Pasted at "
-        [:time {:datetime (.format ^DateTimeFormatter iso8601 (:created data))}
-         (.format ^DateTimeFormatter rfc1123 (:created data))]
-        " | Highlighted as "
-        lexer]]
+     [:span "Pasted at "
+      [:time {:datetime (.format ^DateTimeFormatter iso8601 (:created data))}
+       (.format ^DateTimeFormatter rfc1123 (:created data))]
+      " | Highlighted as "
+      lexer]]
 
-      [:div
-       [:table.highlight
-        [:tbody
-         (map-indexed
-           (fn [i line]
-             (let [i (inc i)]
-               [:tr
-                [:td.line {:data-line i} i]
-                [:td.code {:id i} line]]))
-           lines)]]]
+    [:div
+     [:table.highlight
+      [:tbody
+       (map-indexed
+         (fn [i line]
+           (let [i (inc i)]
+             [:tr
+              [:td.line {:data-line i} i]
+              [:td.code {:id i} line]]))
+         (:lines data))]]]
 
-      [:span.note
-       "&uarr; Click line number to highlight; hold shift to highlight range"]
+    [:span.note
+     "&uarr; Click line number to highlight; hold shift to highlight range"]
 
-      [:script
-       "var lexers = $id('lexers');
+    [:script
+     "var lexers = $id('lexers');
         var currentLexer = lexers.value;
         lexers.addEventListener('change', function(e) {
           if (currentLexer != lexers.value) {
@@ -63,4 +62,4 @@
         [].forEach.call($qsa('time'), function(t) {
           var d = new Date(t.dateTime);
           t.innerText = d.toLocaleString();
-        });"])))
+        });"]))

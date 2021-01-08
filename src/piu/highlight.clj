@@ -62,12 +62,42 @@
 (def js (comp value->clj eval-js))
 
 
+;;; Split HTML in lines with correct open/close tags
+
+(def TAG-RE #"</?[^>]+?>")
+
+
+(defn make-closing-tag [^String tag]
+  (if-let [i (str/index-of tag " ")]
+    (str "</" (.substring tag 1 i) ">")
+    (str "</" (.substring tag 1))))
+
+
+(defn make-lines [html]
+  (let [lines (.split ^String html "\n")
+        *open (atom '())]
+    (vec (for [line lines
+               :let [line-open (str/join (reverse @*open))
+                     _ (doseq [tag (re-seq TAG-RE line)]
+                         ;; if a closing tag, throw away the last tag
+                         ;; discovered, in other case add to a stack
+                         (if (str/starts-with? tag "</")
+                           (swap! *open rest)
+                           (swap! *open conj tag)))
+                     line-close (str/join
+                                  (map make-closing-tag (reverse @*open)))]]
+           (str line-open line line-close)))))
+
+
+;;; Highlighting itself
+
 (def ALIASES {"text" "plaintext"})
+
 
 (mount/defstate -hl
   :start (when ctx
            (js "(lang, s) => {
-               if (lang) {
+               if (lang && lang != 'guess') {
                  return {html: hljs.highlight(lang, s, true).value, lexer: lang};
                } else {
                  var res = hljs.highlightAuto(s);
@@ -77,7 +107,6 @@
 
 
 (defn hl [lang s]
-  (let [lang (get ALIASES lang lang)]
-    (if (= lang "guess")
-      (-hl nil (str/trim s))
-      (-hl lang (str/trim s)))))
+  (let [lang (get ALIASES lang lang)
+        res  (-hl lang (str/trim s))]
+    (assoc res :lines (make-lines (:html res)))))
