@@ -108,5 +108,6 @@
 
 (defn hl [lang s]
   (let [lang (get ALIASES lang lang)
-        res  (-hl lang (str/trim s))]
+        res  (locking -hl
+               (-hl lang (str/trim s)))]
     (assoc res :lines (make-lines (:html res)))))
