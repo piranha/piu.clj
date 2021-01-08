@@ -27,3 +27,4 @@ jobs:
         file: piu
         asset_name: piu-linux-amd64
         tag: ${{ github.ref }}
+        overwrite: true
