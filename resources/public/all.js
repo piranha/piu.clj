@@ -113,26 +113,28 @@ document.addEventListener('DOMContentLoaded', function () {
 /// Highlighting
 
 document.addEventListener('DOMContentLoaded', function() {
-    var table = $qs('table.highlight');
-    if (!table) return;
+  var table = $qs('table.highlight');
+  if (!table) return;
 
-    on(table, 'mouseover', function(e) {
-        if (e.target.className == 'line') {
-            $id(e.target.dataset.line).classList.add('over');
-        }
-    });
+  on(table, 'mouseover', function(e) {
+    if (e.target.className == 'line') {
+      $id(e.target.dataset.line).classList.add('over');
+    }
+  });
 
-    on(table, 'mouseout', function(e) {
-        if (e.target.className == 'line') {
-            $id(e.target.dataset.line).classList.remove('over');
-        }
-    });
+  on(table, 'mouseout', function(e) {
+    if (e.target.className == 'line') {
+      $id(e.target.dataset.line).classList.remove('over');
+    }
+  });
 
-    highlightClicks(table);
+  on(table, 'mousedown', highlightClicks.bind(this, table));
+  setHighlight();
 });
 
 
-function getSel() {
+/// Parse URL to determine what should be highlighted
+function targetSelection() {
     var hash = window.location.hash.slice(1);
     var pair = hash.split('-');
     var start = pair[0] && parseInt(pair[0], 10);
@@ -147,12 +149,13 @@ function getSel() {
     }
 }
 
+/// Highlight whatever URL tells us
 function setHighlight() {
     [].forEach.call($qsa('.selected'), function(el) {
         el.classList.remove('selected');
     });
 
-    var sel = getSel(sel);
+    var sel = targetSelection(sel);
     if (!sel) return;
 
     for (var i = sel.start; i <= sel.end; i++) {
@@ -160,24 +163,23 @@ function setHighlight() {
     }
 }
 
-function highlightClicks(table) {
-    on(table, 'mousedown', function(e) {
-        if (!(e.target.className == 'line')) return;
+/// Handler to highlight whatever user clicks
+function highlightClicks(table, e) {
+  if (!(e.target.className == 'line')) return;
 
-        var line = parseInt(e.target.dataset.line, 10);
+  var line = parseInt(e.target.dataset.line, 10);
 
-        if (!e.shiftKey) {
-            window.location.hash = '#' + line;
-        } else {
-            var sel = getSel();
-            if (line < sel.start) {
-                sel.start = line;
-            } else if (line > sel.end) {
-                sel.end = line;
-            }
-            window.location.hash = '#' + sel.start + '-' + sel.end;
-        }
+  if (!e.shiftKey) {
+    window.location.hash = '#' + line;
+  } else {
+    var sel = targetSelection();
+    if (line < sel.start) {
+      sel.start = line;
+    } else if (line > sel.end) {
+      sel.end = line;
+    }
+    window.location.hash = '#' + sel.start + '-' + sel.end;
+  }
 
-        setHighlight();
-    });
+  setHighlight();
 }
