@@ -92,7 +92,7 @@ def main():
     else:
         data = file(args[0]).read()
         lexer = opts.type or findlexer(args[0])
-    lexer = lexer or guess_lexer(data, 'text')
+    lexer = lexer or guess_lexer(data, 'plaintext')
 
     if lexer not in LEXERS:
         print 'abort: %s is not a valid file type' % lexer
