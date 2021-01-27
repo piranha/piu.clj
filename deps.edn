@@ -23,15 +23,15 @@
             "-Djava.net.preferIPv4Addresses=true"]
 
  :aliases
- {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.7.0"}
-                     cider/cider-nrepl             {:mvn/version "0.25.0"}
+ {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.8.3"}
+                     cider/cider-nrepl             {:mvn/version "0.25.8"}
                      refactor-nrepl/refactor-nrepl {:mvn/version "2.5.0"}
                      clj-commons/pomegranate       {:mvn/version "1.2.0"}}
         :main-opts  ["-i dev/user.clj"
                      "-m nrepl.cmdline -i"
                      "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
-  :uber {:deps      {uberdeps/uberdeps {:mvn/version "0.1.10"}}
+  :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.0.4"}}
          :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                      "-Dclojure.spec.skip-macros=true"]
          :main-opts ["-m uberdeps.uberjar"
@@ -53,7 +53,7 @@
            :extra-deps
            {clj.native-image/clj.native-image
             {:git/url "https://github.com/taylorwood/clj.native-image.git"
-             :sha     "602587dfb5243ea8c72ed3e967c37c1f9d611723"}}}
+             :sha     "f3e40672d5c543b80a2019c1f07b2d3fe785962c"}}}
 
-  :ancient {:extra-deps {olical/depot {:mvn/version "1.8.4"}}
-            :main-opts  ["-m" "depot.outdated.main"]}}}
+  :ancient {:extra-deps {antq/antq {:mvn/version "0.10.2"}}
+            :main-opts  ["-m" "antq.core"]}}}

@@ -30,3 +30,9 @@ native:
 compile:
 #	$(JAVA_HOME)/bin/javac -cp $(JAVA_HOME)/jre/lib/svm/builder/svm.jar resources/CutOffCoreServicesDependencies.java
 	clojure -Srepro -A:native
+
+ancient:
+	clojure -A:dev:ancient
+
+upgrade:
+	clojure -A:dev:ancient --upgrade
