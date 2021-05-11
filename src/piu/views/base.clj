@@ -9,6 +9,8 @@
     [:head
      [:meta {:charset "utf-8"}]
      [:title "paste.in.ua"]
+     [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+
      [:link {:rel "stylesheet" :href "/static/main.css"}]
      [:link {:rel "stylesheet" :href "/static/xcode.css"}]
      [:script {:src "/static/all.js"}]]))
@@ -20,7 +22,7 @@
      [:div
       "paste.in.ua ("
       [:a {:href "/about/"} "about"]
-      ") © since 2009 "
+      ") © 2009 "
       [:a {:href "https://solovyov.net/"} "Alexander Solovyov"]]]))
 
 

@@ -10,8 +10,14 @@
 
 (defn t [{:keys [data owner? lexer lexers]}]
   (hi/html
-    [:div.meta
-     [:span.right
+    [:div.meta.flex
+     [:span.unit "Pasted at "
+      [:time {:datetime (.format ^DateTimeFormatter iso8601 (:created data))}
+       (.format ^DateTimeFormatter rfc1123 (:created data))]
+      " | Highlighted as "
+      lexer]
+
+     [:span {:style "padding-left: 2em;"}
       (base/lexer-select lexer lexers) " "
 
       (when owner?
@@ -28,13 +34,7 @@
 
       [:a#wrap {:href "#"} "toggle wrap"]
       " | "
-      [:a {:href "raw/"} "raw"]]
-
-     [:span "Pasted at "
-      [:time {:datetime (.format ^DateTimeFormatter iso8601 (:created data))}
-       (.format ^DateTimeFormatter rfc1123 (:created data))]
-      " | Highlighted as "
-      lexer]]
+      [:a {:href "raw/"} "raw"]]]
 
     [:div
      [:table.highlight

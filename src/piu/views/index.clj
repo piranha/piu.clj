@@ -25,5 +25,6 @@
 
      [:textarea#text.unit {:name "data" :autofocus true :tabindex 2} raw]
 
-     [:input {:type "submit" :value "Paste!"}]
-     [:span.note "(or press Ctrl-Enter)"]]))
+     [:div
+      [:input {:type "submit" :value "Paste!"}]
+      [:span.note "(or press Ctrl-Enter)"]]]))
