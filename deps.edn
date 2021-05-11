@@ -37,10 +37,10 @@
          :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                      "-Dclojure.spec.skip-macros=true"]
          :main-opts ["-m uberdeps.uberjar"
-                     "--target target/piu.jar"
-                     "--main-class piu.main"]}
+                     "--target" "target/piu.jar"
+                     "--main-class" "piu.main"]}
 
-  :native {:main-opts ["-m clj.native-image piu.main"
+  :native {:main-opts ["-m" "clj.native-image" "piu.main"
                        "--language:js"
                        ;; optional native image name override
                        "-H:Name=piu"
