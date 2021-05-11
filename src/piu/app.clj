@@ -40,6 +40,7 @@
    });")
 (def LEXERS (delay (let [lang-data (hl/js get-lexers-js)]
                      (sort-by (comp str/lower-case :name) lang-data))))
+(def LEXER-SET (delay (into #{} (map :lexer @LEXERS))))
 
 
 (defn q? [req k]
@@ -116,8 +117,13 @@
 
 
 (defn create [req]
-  (let [form (:form-params req)
-        id   (-> req :path-params :id)]
+  (let [form  (:form-params req)
+        id    (-> req :path-params :id)
+        lexer (get form "lexer" "guess")
+        lexer (cond
+                (= lexer "guess")            lexer
+                (contains? @LEXER-SET lexer) lexer
+                :else                        "plaintext")]
     (cond
       (and id
            (nil? (-> req :cookies (get id) :value sign/decrypt)))
@@ -133,14 +139,13 @@
        :body   "Wanna spam? I'll let you if you pay me! :-)"}
 
       :else
-      (let [lexer (get form "lexer" "guess")
-            raw   (get form "data")
-            res   (hl/hl lexer raw)
-            id    (store/write db {:id    id
-                                   :lexer (:lexer res)
-                                   :raw   raw
-                                   :html  (:html res)
-                                   :lines (:lines res)})]
+      (let [raw (get form "data")
+            res (hl/hl lexer raw)
+            id  (store/write db {:id    id
+                                 :lexer (:lexer res)
+                                 :raw   raw
+                                 :html  (:html res)
+                                 :lines (:lines res)})]
         {:status  303
          :cookies {id      {:value     (sign/encrypt id)
                             :path      "/"
