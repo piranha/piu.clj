@@ -7,7 +7,7 @@ run:
 
 uber:
 	clojure -Srepro -e "(compile 'piu.main)"
-	clojure -Srepro -A:uber
+	clojure -Srepro -M:uber
 
 native:
 	$(GRAALVM_HOME)/bin/native-image -jar target/piu.jar \
@@ -29,7 +29,7 @@ native:
 
 compile:
 #	$(JAVA_HOME)/bin/javac -cp $(JAVA_HOME)/jre/lib/svm/builder/svm.jar resources/CutOffCoreServicesDependencies.java
-	clojure -Srepro -A:native
+	clojure -Srepro -M:native
 
 ancient:
 	clojure -M:dev:ancient
