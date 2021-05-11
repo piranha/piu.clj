@@ -20,7 +20,7 @@ jobs:
         graalvm-version: '21.1.0.java11'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        tools-deps: '1.10.3.822'
+        tools-deps: '1.10.3.829'
     - run: gu install native-image
     - run: make compile
     - uses: svenstaro/upload-release-action@v2
