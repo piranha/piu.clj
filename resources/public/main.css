@@ -24,7 +24,7 @@ footer { display: flex; justify-content: center; }
 input[type="submit"] { font-size: 1.5em; width: 5em; }
 #text { display: block; margin: 0.5em 0; border-radius: 5px; }
 
-textarea, .line, .code {
+textarea, input, .line, .code {
     font-family: Monaco, Consolas, Menlo, 'Courier New', monospace; font-size: inherit;}
 
 table { border-spacing: 0;
