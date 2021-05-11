@@ -24,7 +24,7 @@
 
 (defn dbpath []
   (or (System/getenv "DBPATH")
-      "piu.sqlite"))
+      "store"))
 
 
 (mount/defstate db
@@ -63,9 +63,10 @@
                  (and (= lexer "json")
                       (q? req "pretty"))
                  (merge (hl/hl lexer (pretty-json (:raw data)))))
-        data   (if (:lines data)
-                 data
-                 (assoc data :lines (hl/make-lines (:html data))))]
+        data (cond
+               (:lines data) data
+               (:html data)  (assoc data :lines (hl/make-lines (:html data)))
+               :else         nil)]
     (if data
       {:status  200
        :headers {"content-type" "text/html; charset=utf-8"}
@@ -74,8 +75,9 @@
                            :owner? owner?
                            :lexer  lexer
                            :lexers @LEXERS}))}
-      {:status 404
-       :body   "Not Found"})))
+      {:status  404
+       :headers {"content-type" "text/plain"}
+       :body    "Not Found"})))
 
 
 (defn render [req]

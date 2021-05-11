@@ -1,23 +1,23 @@
 (ns piu.tnetstrings
-  "From https://github.com/alexgartrell/tnetstrings-clj"
-  (:import [java.util Arrays]))
+  "From https://github.com/alexgartrell/tnetstrings-clj")
 
 (set! *warn-on-reflection* true)
 
 
 (defn explode-tnetstring [^String s]
   (assert (seq s) "Cannot parse empty string")
-  (try
-    (let [idx     (.indexOf s ":")
-          _       (when (neg? idx)
-                    (throw (ex-info "Cannot find : in string" {:data s})))
-          size    (Long/parseUnsignedLong (.substring s 0 idx))
-          data    (.substring s (inc idx) (+ (inc idx) size))
-          type    (.charAt s (+ (inc idx) size))
-          remains (.substring s (+ (inc idx) size 1))]
-      [data type remains])
-    (catch Exception e
-      (throw (ex-info "Could not parse data" {:data s} e)))))
+  (let [idx (.indexOf s ":")
+        _   (when (neg? idx)
+              (throw (ex-info "Cannot find : in string" {:data s})))
+
+        size  (Long/parseUnsignedLong (.substring s 0 idx))
+        start (inc idx)
+        end   (+ start size)
+
+        data    (.substring s start end)
+        type    (.charAt    s end)
+        remains (.substring s (inc end))]
+    [data type remains]))
 
 
 (declare load-item)
