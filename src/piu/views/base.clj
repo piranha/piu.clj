@@ -16,11 +16,12 @@
 
 (defn footer []
   (hi/html
-    [:div#footer
-     [:p
-      "© since 2009 "
-      [:a {:href "https://solovyov.net/"} "Alexander Solovyov"] ", "
-      [:a {:href "/about/"} "about paste.in.ua"]]]))
+    [:footer
+     [:div
+      "paste.in.ua ("
+      [:a {:href "/about/"} "about"]
+      ") © since 2009 "
+      [:a {:href "https://solovyov.net/"} "Alexander Solovyov"]]]))
 
 
 (defn wrap [content]
@@ -28,20 +29,24 @@
     (:html5 doctype)
     [:html
      (head)
-     [:body
+     [:body.flexv
       [:header
        [:h1 [:a {:href "/"} "paste.in.ua"]]]
 
-      [:div#content content]
+      [:div#content.flexv.unit content]
 
       (footer)]]))
 
 
 (defn lexer-select [lexer lexers]
   (hi/html
-    [:select#lexers {:name "lexer"}
+    [:input#lexers {:list    "lexers-list"
+                    :name    "lexer"
+                    :value   lexer
+                    :onfocus "this.select()"
+                    :tabindex 1}]
+    [:datalist#lexers-list
      [:option {:value "guess"} "Guess type"]
      (for [item lexers]
-       [:option {:value    (:lexer item)
-                 :selected (= (:lexer item) lexer)}
+       [:option {:value (:lexer item)}
         (:name item)])]))

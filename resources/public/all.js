@@ -1,6 +1,3 @@
-// finding out keyCode:
-// http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
-
 var $id = document.getElementById.bind(document);
 var $qs = document.querySelector.bind(document);
 var $qsa = document.querySelectorAll.bind(document);
@@ -16,12 +13,14 @@ function on(els, type, fn) {
 }
 
 
+// finding out keyCode:
+// http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 function addShortcut(keyCode, mods, callback) {
     mods = mods || {};
-    on(document, 'keydown', function(e) {
-        var modsMatched = ((e.ctrlKey  == !!mods.ctrl) &&
+    document.addEventListener('keydown', function(e) {
+        var modsMatched = ((e.ctrlKey  == !!mods.ctrl)  &&
                            (e.shiftKey == !!mods.shift) &&
-                           (e.altKey   == !!mods.alt) &&
+                           (e.altKey   == !!mods.alt)   &&
                            (e.metaKey  == !!mods.meta));
         var received = e.keyCode !== undefined ? e.keyCode : e.which;
         if (modsMatched && received == keyCode) {
@@ -32,35 +31,15 @@ function addShortcut(keyCode, mods, callback) {
 }
 
 
-/// Resize textarea to fill maximum area without adding a scrollbar
-
-document.addEventListener('DOMContentLoaded', function () {
-    var text = $id('text');
-    if (!text) return;
-
-    function absHeight(el) {
-        if (el == document.body) {
-            return Math.max(document.body.offsetHeight,
-                            document.documentElement.offsetHeight);
-        }
-        return parseInt(window.getComputedStyle(el).height, 10);
-    }
-
-    var newheight = window.innerHeight - absHeight(document.body) + absHeight(text);
-    if (newheight > absHeight(text)) {
-        text.style.height = newheight + 'px';
-    }
-});
-
-
 /// Shortcuts
 
 document.addEventListener('DOMContentLoaded', function () {
     var text = $id('text');
 
     function submit(e) {
-        if (!text || !text.value.replace(/^\s+|\s+$/g, '')) { return; }
-        $qs('form') && $qs('form').submit();
+        if (text || text.value.replace(/^\s+|\s+$/g, '').length) {
+            $qs('form') && $qs('form').submit();
+        }
     };
 
     addShortcut(13, {ctrl: true}, submit); // ctrl+enter
@@ -113,23 +92,23 @@ document.addEventListener('DOMContentLoaded', function () {
 /// Highlighting
 
 document.addEventListener('DOMContentLoaded', function() {
-  var table = $qs('table.highlight');
-  if (!table) return;
+    var table = $qs('table.highlight');
+    if (!table) return;
 
-  on(table, 'mouseover', function(e) {
-    if (e.target.className == 'line') {
-      $id(e.target.dataset.line).classList.add('over');
-    }
-  });
+    on(table, 'mouseover', function(e) {
+        if (e.target.className == 'line') {
+            $id(e.target.dataset.line).classList.add('over');
+        }
+    });
 
-  on(table, 'mouseout', function(e) {
-    if (e.target.className == 'line') {
-      $id(e.target.dataset.line).classList.remove('over');
-    }
-  });
+    on(table, 'mouseout', function(e) {
+        if (e.target.className == 'line') {
+            $id(e.target.dataset.line).classList.remove('over');
+        }
+    });
 
-  on(table, 'mousedown', highlightClicks.bind(this, table));
-  setHighlight();
+    on(table, 'mousedown', highlightClicks.bind(this, table));
+    setHighlight();
 });
 
 
@@ -165,21 +144,21 @@ function setHighlight() {
 
 /// Handler to highlight whatever user clicks
 function highlightClicks(table, e) {
-  if (!(e.target.className == 'line')) return;
+    if (!(e.target.className == 'line')) return;
 
-  var line = parseInt(e.target.dataset.line, 10);
+    var line = parseInt(e.target.dataset.line, 10);
 
-  if (!e.shiftKey) {
-    window.location.hash = '#' + line;
-  } else {
-    var sel = targetSelection();
-    if (line < sel.start) {
-      sel.start = line;
-    } else if (line > sel.end) {
-      sel.end = line;
+    if (!e.shiftKey) {
+        window.location.hash = '#' + line;
+    } else {
+        var sel = targetSelection();
+        if (line < sel.start) {
+            sel.start = line;
+        } else if (line > sel.end) {
+            sel.end = line;
+        }
+        window.location.hash = '#' + sel.start + '-' + sel.end;
     }
-    window.location.hash = '#' + sel.start + '-' + sel.end;
-  }
 
-  setHighlight();
+    setHighlight();
 }

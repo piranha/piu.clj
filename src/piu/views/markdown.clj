@@ -41,12 +41,13 @@
       [:title "paste.in.ua"]
       [:link {:rel  "stylesheet"
               :href "https://unpkg.com/mobi.css/dist/mobi.min.css"}]]
-     [:body
-      [:div.flex-center
+     [:body.flex-vertical {:style "min-height: 100vh;"}
+      [:div.unit.flex-center
        [:div.container
         html]]
 
-      (base/footer)]]))
+      [:div.unit-0.flex-center {:style "border-top: solid 1px; background-color: #f5f5f5"}
+       (base/footer)]]]))
 
 
 (defn render [^String md]

@@ -8,7 +8,7 @@
 
 (defn form [{:keys [raw lexers lexer]}]
   (hi/html
-    [:form {:action "." :method "post"}
+    [:form.flexv.unit {:action "." :method "post"}
      [:div.meta
       (base/lexer-select lexer lexers)
 
@@ -23,8 +23,7 @@
 
       [:span.note "(press Ctrl-J to put focus on selectbox)"]]
 
-     [:div
-      [:textarea#text {:name "data" :rows 20 :cols 120 :autofocus true} raw]]
+     [:textarea#text.unit {:name "data" :autofocus true :tabindex 2} raw]
 
      [:input {:type "submit" :value "Paste!"}]
      [:span.note "(or press Ctrl-Enter)"]]))
