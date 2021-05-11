@@ -17,11 +17,11 @@
 
 
 (mount/defstate server
-  :start (httpkit/run-server app/app {:port (port)})
+  :start (let [p (port)]
+           (println "Opening port" p)
+           (httpkit/run-server app/app {:port p}))
   :stop (server))
 
 
 (defn -main [& args]
-  (println "Starting...")
-  (mount/start)
-  (println "Started on port" (port)))
+  (mount/start))

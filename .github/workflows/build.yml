@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2.1.3
+    - uses: actions/cache@v2.1.5
       with:
         path: ~/.m2
         key: m2-${{ hashFiles('**/deps.edn') }}
@@ -17,10 +17,10 @@ jobs:
           m2-
     - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '21.0.0.java11'
+        graalvm-version: '21.1.0.java11'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        tools-deps: '1.10.1.763'
+        tools-deps: '1.10.3.822'
     - run: gu install native-image
     - run: make compile
     - uses: svenstaro/upload-release-action@v2

@@ -240,7 +240,7 @@
 
         (some? (route/match router (update req :uri str "/")))
         {:status  301
-         :headers {"location" (str (:uri req) "/")}}
+         :headers {"Location" (str (:uri req) "/")}}
 
         :else
         {:status 404

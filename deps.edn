@@ -1,16 +1,16 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
- {org.clojure/clojure    {:mvn/version "1.10.2-alpha1"}
-  ring/ring-core         {:mvn/version "1.8.2"}
-  http-kit/http-kit      {:mvn/version "2.5.1"}
-  org.clojure/data.json  {:mvn/version "1.0.0"}
+ {org.clojure/clojure    {:mvn/version "1.10.2"}
+  ring/ring-core         {:mvn/version "1.9.3"}
+  http-kit/http-kit      {:mvn/version "2.5.3"}
+  org.clojure/data.json  {:mvn/version "2.2.3"}
   mount/mount            {:mvn/version "0.1.16"}
   hiccup/hiccup          {:mvn/version "1.0.5"}
-  seancorfield/next.jdbc {:mvn/version "1.1.613"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   org.slf4j/slf4j-api    {:mvn/version "1.7.30"}
   org.slf4j/slf4j-simple {:mvn/version "1.7.30"}
 
+  com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.659"}
   com.atlassian.commonmark/commonmark                       {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-heading-anchor    {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-gfm-strikethrough {:mvn/version "0.17.0"}
@@ -24,12 +24,14 @@
 
  :aliases
  {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.8.3"}
-                     cider/cider-nrepl             {:mvn/version "0.25.8"}
-                     refactor-nrepl/refactor-nrepl {:mvn/version "2.5.0"}
-                     clj-commons/pomegranate       {:mvn/version "1.2.0"}}
-        :main-opts  ["-i dev/user.clj"
-                     "-m nrepl.cmdline -i"
-                     "--middleware [\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
+                     cider/cider-nrepl             {:mvn/version "0.26.0"}
+                     refactor-nrepl/refactor-nrepl {:mvn/version "2.5.1"}
+                     clj-commons/pomegranate       {:mvn/version "1.2.1"}}
+        :main-opts  ["-i" "dev/user.clj"
+                     "-e" "(start)"
+                     "-m" "nrepl.cmdline"
+                     "-i"
+                     "--middleware" "[\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
   :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.0.4"}}
          :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
@@ -53,7 +55,7 @@
            :extra-deps
            {clj.native-image/clj.native-image
             {:git/url "https://github.com/taylorwood/clj.native-image.git"
-             :sha     "f3e40672d5c543b80a2019c1f07b2d3fe785962c"}}}
+             :sha     "4604ae76855e09cdabc0a2ecc5a7de2cc5b775d6"}}}
 
-  :ancient {:extra-deps {antq/antq {:mvn/version "0.10.2"}}
+  :ancient {:extra-deps {antq/antq {:mvn/version "0.13.0"}}
             :main-opts  ["-m" "antq.core"]}}}
