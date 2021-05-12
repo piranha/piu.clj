@@ -138,6 +138,10 @@
       {:status 402
        :body   "Wanna spam? I'll let you if you pay me! :-)"}
 
+      (not (and lexer raw))
+      {:status 400
+       :body "lexer and raw are required parameters"}
+
       :else
       (let [raw (get form "data")
             res (hl/hl lexer raw)

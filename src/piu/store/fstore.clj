@@ -46,18 +46,9 @@
 
 
 (defn compat-loads [^String id ^String s]
-  ;; old python tnetstrings counted bytes instead of codepoints
   (if (every? #(Character/isDigit ^Character %) id)
-    (reduce-kv
-      (fn [acc k v]
-        (assoc acc k (if (string? v)
-                       (-> (.getBytes ^String v "ASCII")
-                           (String. "UTF-8"))
-                       v)))
-      {}
-      (tn/loads (-> (.getBytes s "UTF-8")
-                    (String. "ASCII"))))
-
+    ;; old python tnetstrings counted bytes instead of codepoints
+    (tn/loads (.getBytes s "UTF-8"))
     (tn/loads s)))
 
 
@@ -68,7 +59,7 @@
 
   (read [this id]
     (when-let [s (item-value path id)]
-      (let [data    (compat-loads id s)
+      (let [data    (tn/loads s)
             created (-> (maybe-parse-int (:date data))
                         (Instant/ofEpochSecond)
                         (.atZone utc))]

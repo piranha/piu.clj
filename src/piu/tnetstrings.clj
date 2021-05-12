@@ -1,26 +1,13 @@
 (ns piu.tnetstrings
-  "From https://github.com/alexgartrell/tnetstrings-clj")
+  "From https://github.com/alexgartrell/tnetstrings-clj"
+  (:import [java.util Arrays]))
 
 (set! *warn-on-reflection* true)
 
 
-(defn explode-tnetstring [^String s]
-  (assert (seq s) "Cannot parse empty string")
-  (let [idx (.indexOf s ":")
-        _   (when (neg? idx)
-              (throw (ex-info "Cannot find : in string" {:data s})))
-
-        size  (Long/parseUnsignedLong (.substring s 0 idx))
-        start (inc idx)
-        end   (+ start size)
-
-        data    (.substring s start end)
-        type    (.charAt    s end)
-        remains (.substring s (inc end))]
-    [data type remains]))
-
-
-(declare load-item)
+(defprotocol TNet
+  (explode-tnetstring [this])
+  (load-item [this type]))
 
 
 (defn- load-int [^String s]
@@ -54,7 +41,7 @@
     s))
 
 
-(defn- load-map [data]
+(defn load-map [data]
   (loop [data  data
          accum {}]
     (if (seq data)
@@ -66,14 +53,59 @@
       accum)))
 
 
-(defn- load-item [^String data type]
-  (case type
-    \~ nil
-    \, data
-    \# (load-int data)
-    \! (load-bool data)
-    \] (load-vector data)
-    \} (load-map data)))
+(extend-type String
+  TNet
+  (explode-tnetstring [s]
+    (assert (seq s) "Cannot parse empty string")
+    (let [idx (.indexOf s ":")
+          _   (when (neg? idx)
+                (throw (ex-info "Cannot find : in string" {:data s})))
+
+          size  (Long/parseUnsignedLong (.substring s 0 idx))
+          start (inc idx)
+          end   (+ start size)
+
+          data    (.substring s start end)
+          type    (.charAt    s end)
+          remains (.substring s (inc end))]
+      [data type remains]))
+
+  (load-item [data type]
+    (case type
+      \~ nil
+      \, data
+      \# (load-int data)
+      \! (load-bool data)
+      \] (load-vector data)
+      \} (load-map data))))
+
+
+(extend-type (class (byte-array 0))
+  TNet
+  (explode-tnetstring [^bytes ba]
+    (assert (seq ba) "Cannot parse empty string")
+    (let [s   (String. ^bytes ba "UTF-8")
+          idx (.indexOf s ":")
+          _   (when (neg? idx)
+                (throw (ex-info "Cannot find : in string" {:data s})))
+
+          size  (Long/parseUnsignedLong (.substring s 0 idx))
+          start (inc idx)
+          end   (+ start size)
+
+          data    (Arrays/copyOfRange ^bytes ba start end)
+          type    (nth ba end)
+          remains (Arrays/copyOfRange ^bytes ba (inc end) (count ba))]
+      [data type remains]))
+
+  (load-item [^bytes data type]
+    (case (char type)
+      \~ nil
+      \, (String. ^bytes data "UTF-8")
+      \# (load-int (String. ^bytes data "UTF-8"))
+      \! (load-bool (String. ^bytes data "UTF-8"))
+      \] (load-vector data)
+      \} (load-map data))))
 
 
 ;;; Helper functions for dumps
@@ -124,9 +156,13 @@
 
 
 ;;; Public Functions
+
 (defn loads [^String s]
-  (let [[data type _] (explode-tnetstring s)]
+  (let [[data type _] (try (explode-tnetstring s)
+                           (catch StringIndexOutOfBoundsException _
+                             (explode-tnetstring (.getBytes s "UTF-8"))))]
     (load-item data type)))
+
 
 (defn dumps ^String [data]
   (dump-item data))
