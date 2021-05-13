@@ -181,7 +181,7 @@
 (defn about [req]
   {:status  200
    :headers {"content-type" "text/html; charset=utf-8"}
-   :body    (base/wrap (markdown/render (slurp (io/resource "about.md"))))})
+   :body    (base/wrap [:div.about (markdown/render (slurp (io/resource "about.md")))])})
 
 
 (defmethod response/resource-data :resource

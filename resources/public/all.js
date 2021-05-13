@@ -109,6 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     on(table, 'mousedown', highlightClicks.bind(this, table));
     setHighlight();
+
+    var sel = targetSelection();
+    if (sel.start != sel.end) {
+        $id(sel.start).scrollIntoView();
+    }
 });
 
 
@@ -134,7 +139,7 @@ function setHighlight() {
         el.classList.remove('selected');
     });
 
-    var sel = targetSelection(sel);
+    var sel = targetSelection();
     if (!sel) return;
 
     for (var i = sel.start; i <= sel.end; i++) {
