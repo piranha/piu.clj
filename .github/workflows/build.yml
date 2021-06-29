@@ -22,6 +22,7 @@ jobs:
       with:
         tools-deps: '1.10.3.829'
     - run: gu install native-image
+    - run: sudo apt-get install musl-tools libz-dev
     - run: make compile
     - uses: svenstaro/upload-release-action@v2
       with:

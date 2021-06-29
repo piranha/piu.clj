@@ -41,9 +41,9 @@
                      "--main-class" "piu.main"]}
 
   :native {:main-opts ["-m" "clj.native-image" "piu.main"
+                       "--static" ;"--libc=musl"
                        "--language:js"
-                       ;; optional native image name override
-                       "-H:Name=piu"
+                       "-H:Name=piu" ; optional native image name override
                        "-H:+ReportExceptionStackTraces"
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"
