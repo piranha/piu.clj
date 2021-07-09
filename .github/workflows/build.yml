@@ -24,10 +24,16 @@ jobs:
     - run: gu install native-image
     - run: sudo apt-get install musl-tools libz-dev
     - run: make compile
+    - name: "Generate tag"
+      run: |
+        COMMIT_DATE=$(git show -s --format=%cd --date=format:%Y%m%d HEAD)
+        LAST=$(git tag -l "$COMMIT_DATE*" --sort v:refname | tail -1 | awk -F- '{print $NF}')
+        N=$(expr ${LAST} + 1)
+        echo "tag_name=${COMMIT_DATE}-${N}" >> $GITHUB_ENV
     - uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: piu
         asset_name: piu-linux-amd64
-        tag: ${{ github.ref }}
+        tag: ${{ env.tag_name }}
         overwrite: true
