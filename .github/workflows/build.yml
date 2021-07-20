@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2.1.5
+    - uses: actions/cache@v2.1.6
       with:
         path: ~/.m2
         key: m2-${{ hashFiles('**/deps.edn') }}
@@ -17,10 +17,10 @@ jobs:
           m2-
     - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '21.1.0.java11'
+        graalvm-version: '21.2.0.java11'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        tools-deps: '1.10.3.829'
+        tools-deps: '1.10.3.920'
     - run: gu install native-image
     - run: sudo apt-get install musl-tools libz-dev
     - run: make compile

@@ -1,16 +1,16 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
  {org.clojure/clojure    {:mvn/version "1.10.3"}
-  ring/ring-core         {:mvn/version "1.9.3"}
+  ring/ring-core         {:mvn/version "1.9.4"}
   http-kit/http-kit      {:mvn/version "2.5.3"}
-  org.clojure/data.json  {:mvn/version "2.2.3"}
+  org.clojure/data.json  {:mvn/version "2.4.0"}
   mount/mount            {:mvn/version "0.1.16"}
   hiccup/hiccup          {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
-  org.slf4j/slf4j-api    {:mvn/version "1.7.30"}
-  org.slf4j/slf4j-simple {:mvn/version "1.7.30"}
+  org.slf4j/slf4j-api    {:mvn/version "1.7.32"}
+  org.slf4j/slf4j-simple {:mvn/version "1.7.32"}
 
-  com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.659"}
+  com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.674"}
   com.atlassian.commonmark/commonmark                       {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-heading-anchor    {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-gfm-strikethrough {:mvn/version "0.17.0"}
