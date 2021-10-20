@@ -17,10 +17,10 @@ jobs:
           m2-
     - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '21.2.0.java11'
+        graalvm-version: '21.3.0.java11'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        tools-deps: '1.10.3.920'
+        tools-deps: '1.10.3.986'
     - run: gu install native-image
     - run: sudo apt-get install musl-tools libz-dev
     - run: make compile

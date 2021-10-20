@@ -10,7 +10,7 @@
   org.slf4j/slf4j-api    {:mvn/version "1.7.32"}
   org.slf4j/slf4j-simple {:mvn/version "1.7.32"}
 
-  com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.674"}
+  com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.737"}
   com.atlassian.commonmark/commonmark                       {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-heading-anchor    {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-gfm-strikethrough {:mvn/version "0.17.0"}
@@ -24,7 +24,7 @@
 
  :aliases
  {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.8.3"}
-                     cider/cider-nrepl             {:mvn/version "0.26.0"}
+                     cider/cider-nrepl             {:mvn/version "0.27.2"}
                      refactor-nrepl/refactor-nrepl {:mvn/version "2.5.1"}
                      clj-commons/pomegranate       {:mvn/version "1.2.1"}}
         :main-opts  ["-i" "dev/user.clj"
@@ -33,7 +33,7 @@
                      "-i"
                      "--middleware" "[\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
-  :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.0.4"}}
+  :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.1.0"}}
          :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                      "-Dclojure.spec.skip-macros=true"]
          :main-opts ["-m uberdeps.uberjar"
