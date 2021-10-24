@@ -1,33 +1,10 @@
 (ns piu.views.markdown
   (:require [hiccup.core :as hi]
             [hiccup.page :refer [doctype]])
-  (:import [org.commonmark.parser Parser]
-           [org.commonmark.renderer.html HtmlRenderer]
-           [org.commonmark.ext.heading.anchor HeadingAnchorExtension]
-           [org.commonmark.ext.gfm.strikethrough StrikethroughExtension]
-           [org.commonmark.ext.gfm.tables TablesExtension]
-           [org.commonmark.ext.ins InsExtension]
-           [org.commonmark.ext.autolink AutolinkExtension]
-           [org.commonmark.ext.task.list.items TaskListItemsExtension]))
+  (:import [com.github.rjeschke.txtmark Processor Configuration]))
 
 
 (set! *warn-on-reflection* true)
-
-
-(def extensions [(HeadingAnchorExtension/create)
-                 (StrikethroughExtension/create)
-                 (TablesExtension/create)
-                 (InsExtension/create)
-                 (AutolinkExtension/create)
-                 (TaskListItemsExtension/create)])
-(def ^Parser parser
-  (-> (Parser/builder)
-      (.extensions extensions)
-      (.build)))
-(def ^HtmlRenderer renderer
-  (-> (HtmlRenderer/builder)
-      (.extensions extensions)
-      (.build)))
 
 
 (defn t [html]
@@ -45,7 +22,8 @@
        [:div.container
         html]]
 
-      [:footer.unit-0.flex-center {:style "border-top: solid 1px; background-color: #f5f5f5"}
+      [:footer.unit-0.flex-center
+       {:style "border-top: solid 1px; background-color: #f5f5f5"}
        [:div
         "paste.in.ua ("
         [:a {:href "/about/"} "about"]
@@ -53,6 +31,7 @@
 
 
 (defn render [^String md]
-  (->> md
-       (.parse parser)
-       (.render renderer)))
+  (let [cfg (-> (Configuration/builder)
+                (.forceExtentedProfile)
+                (.build))]
+    (Processor/process md cfg)))

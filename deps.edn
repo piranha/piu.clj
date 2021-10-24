@@ -13,14 +13,8 @@
   ;; to initialize clojure classes at build time
   com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}
 
-  com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.737"}
-  com.atlassian.commonmark/commonmark                       {:mvn/version "0.17.0"}
-  com.atlassian.commonmark/commonmark-ext-heading-anchor    {:mvn/version "0.17.0"}
-  com.atlassian.commonmark/commonmark-ext-gfm-strikethrough {:mvn/version "0.17.0"}
-  com.atlassian.commonmark/commonmark-ext-gfm-tables        {:mvn/version "0.17.0"}
-  com.atlassian.commonmark/commonmark-ext-ins               {:mvn/version "0.17.0"}
-  com.atlassian.commonmark/commonmark-ext-autolink          {:mvn/version "0.17.0"}
-  com.atlassian.commonmark/commonmark-ext-task-list-items   {:mvn/version "0.17.0"}}
+  com.github.seancorfield/next.jdbc {:mvn/version "1.2.737"}
+  com.github.rjeschke/txtmark       {:mvn/version "0.13"}}
 
  :jvm-opts ["-Djava.net.preferIPv4Stack=true"
             "-Djava.net.preferIPv4Addresses=true"]
@@ -50,7 +44,7 @@
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"
                        "--report-unsupported-elements-at-runtime"
-                       "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder,org.commonmark.internal.DocumentParser,org.commonmark.internal.InlineParserImpl,org.commonmark.internal.inline.AutolinkInlineParser,org.commonmark.internal.inline.HtmlInlineParser,org.commonmark.ext.task.list.items.internal.TaskListItemPostProcessor,org.commonmark.internal.inline.EntityInlineParser,org.commonmark.internal.inline.BackslashInlineParser"]
+                       "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder"]
            :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                        "-Dclojure.spec.skip-macros=true"]
            :extra-deps
