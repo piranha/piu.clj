@@ -10,6 +10,9 @@
   org.slf4j/slf4j-api    {:mvn/version "1.7.32"}
   org.slf4j/slf4j-simple {:mvn/version "1.7.32"}
 
+  ;; to initialize clojure classes at build time
+  com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}
+
   com.github.seancorfield/next.jdbc                         {:mvn/version "1.2.737"}
   com.atlassian.commonmark/commonmark                       {:mvn/version "0.17.0"}
   com.atlassian.commonmark/commonmark-ext-heading-anchor    {:mvn/version "0.17.0"}
@@ -41,15 +44,13 @@
                      "--main-class" "piu.main"]}
 
   :native {:main-opts ["-m" "clj.native-image" "piu.main"
-                       "--static" ;"--libc=musl"
                        "--language:js"
                        "-H:Name=piu" ; optional native image name override
                        "-H:+ReportExceptionStackTraces"
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"
-                       "--initialize-at-build-time"
                        "--report-unsupported-elements-at-runtime"
-                       "--no-server"]
+                       "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder,org.commonmark.internal.DocumentParser,org.commonmark.internal.InlineParserImpl,org.commonmark.internal.inline.AutolinkInlineParser,org.commonmark.internal.inline.HtmlInlineParser,org.commonmark.ext.task.list.items.internal.TaskListItemPostProcessor,org.commonmark.internal.inline.EntityInlineParser,org.commonmark.internal.inline.BackslashInlineParser"]
            :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                        "-Dclojure.spec.skip-macros=true"]
            :extra-deps
