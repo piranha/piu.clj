@@ -10,8 +10,8 @@
   org.slf4j/slf4j-api    {:mvn/version "1.7.32"}
   org.slf4j/slf4j-simple {:mvn/version "1.7.32"}
 
-  ;; to initialize clojure classes at build time
-  com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}
+  ;;; to initialize clojure classes at build time
+  ;; com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}
 
   com.github.seancorfield/next.jdbc {:mvn/version "1.2.737"}
   com.github.rjeschke/txtmark       {:mvn/version "0.13"}}
@@ -39,18 +39,31 @@
 
   :native {:main-opts ["-m" "clj.native-image" "piu.main"
                        "--language:js"
-                       "-H:Name=piu" ; optional native image name override
+                       "-H:Name=piu"    ; optional native image name override
                        "-H:+ReportExceptionStackTraces"
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"
                        "--report-unsupported-elements-at-runtime"
-                       "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder"]
+                       ;;"--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder"
+                       "--initialize-at-run-time"]
            :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                        "-Dclojure.spec.skip-macros=true"]
            :extra-deps
            {clj.native-image/clj.native-image
             {:git/url "https://github.com/taylorwood/clj.native-image.git"
              :sha     "4604ae76855e09cdabc0a2ecc5a7de2cc5b775d6"}}}
+
+  :dump {:main-opts ["-m" "clj.native-image" "piu.main"
+                     "--language:js"
+                     "-H:Name=piu"      ; optional native image name override
+                     "-H:+ReportExceptionStackTraces"
+                     "-H:+RemoveSaturatedTypeFlows"
+                     "-H:ResourceConfigurationFiles=resource-config.json"
+                     "--report-unsupported-elements-at-runtime"
+                     "--initialize-at-run-time"
+                     "-H:DashboardDump=piu-dash"
+                     ;;"-H:+DashboardCode"
+                     "-H:+DashboardHeap"]}
 
   :ancient {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
             :main-opts  ["-m" "antq.core"]}}}
