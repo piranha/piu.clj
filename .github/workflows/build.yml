@@ -6,9 +6,11 @@ on:
 
 jobs:
   build:
-    runs-on: buildjet-8vcpu-ubuntu-2004
+    runs-on: buildjet-4vcpu-ubuntu-2004
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 10 # so that today's tags are retrieved
     - uses: actions/cache@v2.1.6
       with:
         path: ~/.m2
