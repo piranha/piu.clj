@@ -41,7 +41,17 @@ surprisingly weird stuff).
 
 ## Tools
 
-### Command Line
+### Curl
+
+```
+cat > ~/bin/piu <<EOF
+#!/bin/sh
+curl --data-urlencode 'data@-' -w '%{redirect_url}\n' https://paste.in.ua/
+EOF
+chmod +x ~/bin/piu
+```
+
+### Command Line Client
 
 You can install command line [utility](/piu) like that:
 

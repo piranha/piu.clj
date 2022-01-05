@@ -42,7 +42,7 @@ table { border-spacing: 0;
         text-align: left;
         vertical-align: top; }
 
-.code:hover, .code.over { background-color: #ffffe3; }
+tr:hover .code { background-color: #ffffe3; }
 .selected { background-color: #fafab0; }
 .selecting { background-color: #b0b0fa; }
 

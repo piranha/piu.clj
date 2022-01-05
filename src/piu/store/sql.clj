@@ -1,7 +1,7 @@
 (ns piu.store.sql
   (:import [java.time Instant ZonedDateTime LocalDateTime ZoneId ZoneRegion]
            [java.time.format DateTimeFormatter])
-  (:require [next.jdbc :as jdbc]
+  #_(:require [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]
 
             [piu.store :as store]))
@@ -13,7 +13,7 @@
 (def utc (ZoneId/of "UTC"))
 
 
-(defrecord SQL [ds]
+#_(defrecord SQL [ds]
   store/Storage
   (has [this id]
     (some? (jdbc/execute-one! ds
@@ -44,5 +44,5 @@
       id)))
 
 
-(defn create [ds]
+#_(defn create [ds]
   (->SQL (jdbc/get-datasource ds)))
