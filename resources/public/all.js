@@ -4,52 +4,52 @@ var $qsa = document.querySelectorAll.bind(document);
 
 
 function on(els, type, fn) {
-    if (!els) return;
-    if (els && els.nodeType) return on([els], type, fn);
+  if (!els) return;
+  if (els && els.nodeType) return on([els], type, fn);
 
-    for (var i = 0; i < els.length; i++) {
-        els[i].addEventListener(type, fn);
-    }
+  for (var i = 0; i < els.length; i++) {
+    els[i].addEventListener(type, fn);
+  }
 }
 
 
 // finding out keyCode:
 // http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 function addShortcut(keyCode, mods, callback) {
-    mods = mods || {};
-    document.addEventListener('keydown', function(e) {
-        var modsMatched = ((e.ctrlKey  == !!mods.ctrl)  &&
-                           (e.shiftKey == !!mods.shift) &&
-                           (e.altKey   == !!mods.alt)   &&
-                           (e.metaKey  == !!mods.meta));
-        var received = e.keyCode !== undefined ? e.keyCode : e.which;
-        if (modsMatched && received == keyCode) {
-            callback(e);
-            e.preventDefault();
-        }
-    });
+  mods = mods || {};
+  document.addEventListener('keydown', function(e) {
+    var modsMatched = ((e.ctrlKey  == !!mods.ctrl)  &&
+                       (e.shiftKey == !!mods.shift) &&
+                       (e.altKey   == !!mods.alt)   &&
+                       (e.metaKey  == !!mods.meta));
+    var received = e.keyCode !== undefined ? e.keyCode : e.which;
+    if (modsMatched && received == keyCode) {
+      callback(e);
+      e.preventDefault();
+    }
+  });
 }
 
 
 /// Shortcuts
 
 document.addEventListener('DOMContentLoaded', function () {
-    var text = $id('text');
+  var text = $id('text');
 
-    function submit(e) {
-        if (text || text.value.replace(/^\s+|\s+$/g, '').length) {
-            $qs('form') && $qs('form').submit();
-        }
-    };
+  function submit(e) {
+    if (text || text.value.replace(/^\s+|\s+$/g, '').length) {
+      $qs('form') && $qs('form').submit();
+    }
+  };
 
-    addShortcut(13, {ctrl: true}, submit); // ctrl+enter
-    addShortcut(13, {meta: true}, submit); // cmd+enter
-    addShortcut(74, {ctrl: true}, function() { // ctrl+j
-        lexers.focus();
-    });
-    addShortcut(78, {ctrl: true}, function() { // ctrl+n
-        document.location.href = '/';
-    });
+  addShortcut(13, {ctrl: true}, submit); // ctrl+enter
+  addShortcut(13, {meta: true}, submit); // cmd+enter
+  addShortcut(74, {ctrl: true}, function() { // ctrl+j
+    lexers.focus();
+  });
+  addShortcut(78, {ctrl: true}, function() { // ctrl+n
+    document.location.href = '/';
+  });
 
 });
 
@@ -57,113 +57,119 @@ document.addEventListener('DOMContentLoaded', function () {
 /// Lexers
 
 document.addEventListener('DOMContentLoaded', function () {
-    var lexers = $id('lexers');
-    if (!lexers) return;
+  var lexers = $id('lexers');
+  if (!lexers) return;
 
-    function selectHotLang() {
-        var selected = $qs('.hot.selected'),
-            next = $qs('.hot[rel=' + lexers.value + ']');
-        selected && selected.classList.remove('selected');
-        next && next.classList.add('selected');
-    }
+  function selectHotLang() {
+    var selected = $qs('.hot.selected'),
+        next = $qs('.hot[rel=' + lexers.value + ']');
+    selected && selected.classList.remove('selected');
+    next && next.classList.add('selected');
+  }
 
-    lexers.addEventListener('change', selectHotLang);
+  lexers.addEventListener('change', selectHotLang);
+  selectHotLang();
+
+  on($qsa('.hot'), 'click', function(e) {
+    e.preventDefault();
+    lexers.value = e.target.rel;
     selectHotLang();
-
-    on($qsa('.hot'), 'click', function(e) {
-        e.preventDefault();
-        lexers.value = e.target.rel;
-        selectHotLang();
-        text.focus();
-    });
+    text.focus();
+  });
 });
 
 
 /// Right side controls
 
 document.addEventListener('DOMContentLoaded', function () {
-    on($id('wrap'), 'click', function(e) {
-        e.preventDefault();
-        $id('content').classList.toggle('wrap');
-    });
+  on($id('wrap'), 'click', function(e) {
+    e.preventDefault();
+    $id('content').classList.toggle('wrap');
+  });
 });
 
 
 /// Highlighting
 
 document.addEventListener('DOMContentLoaded', function() {
-    var table = $qs('table.highlight');
-    if (!table) return;
+  var table = $qs('table.highlight');
+  if (!table) return;
 
-    on(table, 'mouseover', function(e) {
-        if (e.target.className == 'line') {
-            $id(e.target.dataset.line).classList.add('over');
-        }
-    });
+  on(table, 'mousedown', highlightClicks.bind(this, table));
+  setHighlight();
 
-    on(table, 'mouseout', function(e) {
-        if (e.target.className == 'line') {
-            $id(e.target.dataset.line).classList.remove('over');
-        }
-    });
-
-    on(table, 'mousedown', highlightClicks.bind(this, table));
-    setHighlight();
-
-    var sel = targetSelection();
-    if (sel.start != sel.end) {
-        $id(sel.start).scrollIntoView();
-    }
+  var sels = getSelections().sort();
+  var sel = sels[0];
+  // if there is no way for browser to understand what to do
+  if (sel && sels.length > 1 && (sel.start != sel.end)) {
+    $id(sel.start).scrollIntoView();
+  }
 });
 
 
 /// Parse URL to determine what should be highlighted
-function targetSelection() {
-    var hash = window.location.hash.slice(1);
-    var pair = hash.split('-');
-    var start = pair[0] && parseInt(pair[0], 10);
-    var end = pair[1] && parseInt(pair[1], 10) || start;
+function parseSelectionPair(s) {
+  var pair = s.split('-');
+  var start = pair[0] && parseInt(pair[0], 10);
+  var end = pair[1] && parseInt(pair[1], 10) || start;
 
-    if (!start) {
-        return;
-    } else if (start > end) {
-        return {start: end, end: start};
-    } else {
-        return {start: start, end: end};
-    }
+  if (!start) {
+    return;
+  } else if (start > end) {
+    return {start: end, end: start};
+  } else {
+    return {start: start, end: end};
+  }
+}
+
+function getSelections() {
+  var hash = window.location.hash.slice(1);
+  var bits = hash.split(',');
+  return bits.map(parseSelectionPair);
+}
+
+function encodeSelections(sels) {
+  return sels
+    .map((sel) => sel.start == sel.end ? sel.start : sel.start + '-' + sel.end)
+    .join(',');
 }
 
 /// Highlight whatever URL tells us
-function setHighlight() {
-    [].forEach.call($qsa('.selected'), function(el) {
-        el.classList.remove('selected');
-    });
+function setHighlight(/* optional */ sels) {
+  sels = sels || getSelections();
 
-    var sel = targetSelection();
-    if (!sel) return;
+  [].forEach.call($qsa('.selected'), function(el) {
+    el.classList.remove('selected');
+  });
 
-    for (var i = sel.start; i <= sel.end; i++) {
-        $id(i).classList.add('selected');
+  for (var j = 0; j < sels.length; j++) {
+    for (var i = sels[j].start; i <= sels[j].end; i++) {
+      $id(i).classList.add('selected');
     }
+  }
 }
 
 /// Handler to highlight whatever user clicks
 function highlightClicks(table, e) {
-    if (!(e.target.className == 'line')) return;
+  if (!(e.target.className == 'line')) return;
 
-    var line = parseInt(e.target.dataset.line, 10);
+  var line = parseInt(e.target.dataset.line, 10);
 
-    if (!e.shiftKey) {
-        window.location.hash = '#' + line;
-    } else {
-        var sel = targetSelection();
-        if (line < sel.start) {
-            sel.start = line;
-        } else if (line > sel.end) {
-            sel.end = line;
-        }
-        window.location.hash = '#' + sel.start + '-' + sel.end;
+  var sels = getSelections();
+  var sel = sels[sels.length - 1];
+  if (e.shiftKey && sel) {
+    if (line < sel.start) {
+      sel.start = line;
+    } else if (line > sel.end) {
+      sel.end = line;
     }
+  } else if (e.metaKey || e.ctrlKey) {
+    sels.push({start: line, end: line});
+  } else {
+    sels = [{start: line, end: line}];
+  }
 
-    setHighlight();
+  // we have updated selection in-place, so should be okay
+  window.location.hash = '#' + encodeSelections(sels);
+  setHighlight(sels);
 }

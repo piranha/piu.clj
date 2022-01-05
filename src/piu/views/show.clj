@@ -48,7 +48,7 @@
          (:lines data))]]]
 
     [:span.note
-     "&uarr; Click line number to highlight; hold shift to highlight range"]
+     "&uarr; Click line number to highlight; hold shift to highlight range; hold cmd/ctrl to add ranges"]
 
     [:script
      "var lexers = $id('lexers');
