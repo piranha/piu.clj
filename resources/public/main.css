@@ -48,7 +48,7 @@ tr:hover .code { background-color: #ffffe3; }
 
 .meta { background-color: #f5f5f5; padding: 0.5em;
         border-top: 1px dashed #bbb; border-bottom: 1px dashed #bbb;
-        white-space: nowrap; overflow: scroll; }
+        white-space: nowrap; overflow-x: auto; }
 .note { color: grey; padding: 0.1em 0.5em; }
 .right { float: right; }
 

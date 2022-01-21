@@ -124,6 +124,8 @@ function parseSelectionPair(s) {
 
 function getSelections() {
   var hash = window.location.hash.slice(1);
+  if (!hash)
+    return [];
   var bits = hash.split(',');
   return bits.map(parseSelectionPair);
 }
