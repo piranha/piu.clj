@@ -188,7 +188,8 @@
 
 
 (defn resource [req]
-  (response/resource-response (-> req :path-params :path) {:root "public"}))
+  (cond-> (response/resource-response (-> req :path-params :path) {:root "public"})
+    (not (config/DEV)) (assoc-in [:headers "cache-control"] "max-age=31536000")))
 
 
 (defn one-file [path]

@@ -4,6 +4,12 @@
 (set! *warn-on-reflection* true)
 
 
+(defn DEV []
+  (or (System/getenv "DEV")
+      (and (= (System/getProperty "os.name") "Mac OS X")
+           (not (System/getenv "PROD")))))
+
+
 (defn PORT []
   (Integer/parseInt
     (or (System/getenv "PORT") "8000")))
