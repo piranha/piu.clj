@@ -8,6 +8,7 @@
             [clojure.data.json :as j]
             [mount.core :as mount]
 
+            [piu.config :as config]
             [piu.store :as store]
             [piu.store.fstore :as fstore]
             [piu.highlight :as hl]
@@ -22,13 +23,8 @@
 (set! *warn-on-reflection* true)
 
 
-(defn dbpath []
-  (or (System/getenv "DBPATH")
-      "store"))
-
-
 (mount/defstate db
-  :start (fstore/create (dbpath)))
+  :start (fstore/create (config/DBPATH)))
 
 
 (def SPAM-RE #"^comment\d+,")
