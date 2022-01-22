@@ -4,6 +4,7 @@
 
 (set! *warn-on-reflection* true)
 
+
 (defn head []
   (hi/html
     [:head
@@ -16,16 +17,6 @@
      [:script {:src "/static/all.js"}]]))
 
 
-(defn footer []
-  (hi/html
-    [:footer
-     [:div
-      "paste.in.ua ("
-      [:a {:href "/about/"} "about"]
-      ") © 2009 "
-      [:a {:href "https://solovyov.net/"} "Alexander Solovyov"]]]))
-
-
 (defn wrap [content]
   (hi/html
     (:html5 doctype)
@@ -33,11 +24,10 @@
      (head)
      [:body.flexv
       [:header
-       [:h1 [:a {:href "/"} "paste.in.ua"]]]
+       [:h1.ib [:a {:href "/"} "paste.in.ua"]]
+       [:span.ml5 "(" [:a {:href "/about/"} "about"] ")"]]
 
-      [:div#content.flexv.unit content]
-
-      (footer)]]))
+      [:div#content.flexv.unit content]]]))
 
 
 (defn lexer-select [lexer lexers]

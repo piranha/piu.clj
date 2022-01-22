@@ -1,20 +1,57 @@
+/* -*- css-indent-offset: 2 -*- */
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  line-height: calc(1em + 0.5rem);
+}
+html, body {
+  height: 100%;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+}
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+input, button, textarea, select {
+  font: inherit;
+}
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+
+/*** Base */
+
 html { font-family: Helvetica, sans-serif;
+       height: 100%;
        background-color: white; /* for those with strange default color ;-) */}
-body { margin: 0; font-size: 1rem; }
+body { min-height: 100%; font-size: 1rem; }
 img { border: 0; }
 header, #content { margin: 0 auto; width: 90%; }
-h1, h2, h3 { margin: 0.3rem 0; }
+h1, h2, h3 { margin: 1rem 0 0.3rem; }
+h1 + h2, h2 + h3 { margin: 0 0 0.3rem; }
 h1 a, h2 a, h3 a { text-decoration: none; color: black; }
 
-/*** Layout */
 
-html { height: 100%; }
-body { min-height: 100%; }
+/*** Utils */
+
 .flex { display: flex; }
 .flexv { display: flex; flex-direction: column; }
 .unit { flex: 1; }
-footer { display: flex; justify-content: center; }
+.ib { display: inline-block; }
+.right { float: right; }
+.ml5 { margin-left: 0.5rem; }
 
+
+/*** Styles */
 
 .hot { cursor: pointer; text-decoration: none; border-bottom: dashed; border-width: 1px;
        padding-top: 1px; color: black; }
@@ -50,9 +87,9 @@ tr:hover .code { background-color: #ffffe3; }
         border-top: 1px dashed #bbb; border-bottom: 1px dashed #bbb;
         white-space: nowrap; overflow-x: auto; }
 .note { color: grey; padding: 0.1em 0.5em; }
-.right { float: right; }
 
-footer { border-top: solid 1px; background-color: #f5f5f5; margin: 1em 0 0 0; }
+footer { display: flex; justify-content: center;
+         border-top: solid 1px; background-color: #f5f5f5; margin: 1em 0 0 0; }
 footer a { color: black; }
 
 /* Wrapping */
