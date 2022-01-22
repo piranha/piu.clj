@@ -1,8 +1,26 @@
 (ns piu.views.base
+  (:import [java.util.zip Adler32])
   (:require [hiccup.core :as hi]
-            [hiccup.page :refer [doctype]]))
+            [hiccup.page :refer [doctype]]
+            [clojure.java.io :as io]))
 
 (set! *warn-on-reflection* true)
+
+
+(defn adler32 [s]
+  (-> (doto (Adler32.)
+        (.update (.getBytes ^String s "UTF-8")))
+      .getValue))
+
+
+(def get-hash
+  (memoize
+    (fn [filename]
+      (some-> filename io/resource slurp adler32 str))))
+
+
+(defn static [path]
+  (str "/static/" path "?v=" (get-hash (str "public/" path))))
 
 
 (defn head []
@@ -12,9 +30,9 @@
      [:title "paste.in.ua"]
      [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
 
-     [:link {:rel "stylesheet" :href "/static/main.css"}]
-     [:link {:rel "stylesheet" :href "/static/xcode.css"}]
-     [:script {:src "/static/all.js"}]]))
+     [:link {:rel "stylesheet" :href (static "main.css")}]
+     [:link {:rel "stylesheet" :href (static "xcode.css")}]
+     [:script {:src (static "all.js")}]]))
 
 
 (defn wrap [content]
