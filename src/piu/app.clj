@@ -5,8 +5,8 @@
             [ring.middleware.params :as params]
             [ring.middleware.cookies :as cookies]
             [ring.middleware.content-type :as ct]
-            [clojure.data.json :as j]
             [mount.core :as mount]
+            [jsonista.core :as j]
 
             [piu.config :as config]
             [piu.store :as store]
@@ -44,8 +44,14 @@
       (contains? (:query-params req) k)))
 
 
+(def +pretty-mapper+
+  (j/object-mapper {:pretty true}))
+
+
 (defn pretty-json [s]
-  (with-out-str (-> s j/read-str j/pprint)))
+  (-> s
+      j/read-value
+      (j/write-value-as-string +pretty-mapper+)))
 
 
 (defn show [req]

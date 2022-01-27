@@ -1,20 +1,20 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
- {org.clojure/clojure    {:mvn/version "1.10.3"}
-  ring/ring-core         {:mvn/version "1.9.5"}
-  http-kit/http-kit      {:mvn/version "2.5.3"}
-  org.clojure/data.json  {:mvn/version "2.4.0"}
-  mount/mount            {:mvn/version "0.1.16"}
-  hiccup/hiccup          {:mvn/version "1.0.5"}
+ {org.clojure/clojure         {:mvn/version "1.10.3"}
+  ring/ring-core              {:mvn/version "1.9.5"}
+  http-kit/http-kit           {:mvn/version "2.5.3"}
+  org.clojure/data.json       {:mvn/version "2.4.0"}
+  metosin/jsonista            {:mvn/version "0.3.5"}
+  mount/mount                 {:mvn/version "0.1.16"}
+  hiccup/hiccup               {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   ;; com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
-  org.slf4j/slf4j-api    {:mvn/version "1.7.35"}
-  org.slf4j/slf4j-simple {:mvn/version "1.7.35"}
+  org.slf4j/slf4j-api         {:mvn/version "1.7.35"}
+  org.slf4j/slf4j-simple      {:mvn/version "1.7.35"}
+  com.github.rjeschke/txtmark {:mvn/version "0.13"}
 
   ;;; to initialize clojure classes at build time
-  com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}
-
-  com.github.rjeschke/txtmark       {:mvn/version "0.13"}}
+  com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}}
 
  :jvm-opts ["-Djava.net.preferIPv4Stack=true"
             "-Djava.net.preferIPv4Addresses=true"]
