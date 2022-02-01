@@ -105,17 +105,14 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!table) return;
 
   on(table, 'mousedown', highlightClicks.bind(this, table));
-  var sels = setHighlight().sort();
-
-  var sel = sels[0];
-  // if there is no way for browser to understand what to do
-  if (sel && (sels.length > 1 || (sel.start != sel.end))) {
-    window.scroll({top: offsetTop($id(sel.start))});
-  }
+  setHighlight();
+  scrollIntoView();
 });
+
 
 window.addEventListener('popstate', function() {
   setHighlight();
+  scrollIntoView();
 });
 
 
@@ -167,8 +164,8 @@ function encodeSelections(sels) {
 }
 
 /// Highlight whatever URL tells us
-function setHighlight(/* optional */ sels) {
-  sels = sels || getSelections();
+function setHighlight() {
+  var sels = getSelections();
 
   [].forEach.call($qsa('.selected'), function(el) {
     el.classList.remove('selected');
@@ -181,6 +178,18 @@ function setHighlight(/* optional */ sels) {
   }
   return sels;
 }
+
+
+function scrollIntoView() {
+  var sels = getSelections().sort();
+
+  var sel = sels[0];
+  // if there is no way for browser to understand what to do
+  if (sel && (sels.length > 1 || (sel.start != sel.end))) {
+    window.scroll({top: offsetTop($id(sel.start))});
+  }
+}
+
 
 /// Handler to highlight whatever user clicks
 function highlightClicks(table, e) {
@@ -204,5 +213,5 @@ function highlightClicks(table, e) {
 
   // we have updated selection in-place, so should be okay
   window.history.pushState(null, null, '#' + encodeSelections(sels));
-  setHighlight(sels);
+  setHighlight();
 }
