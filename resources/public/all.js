@@ -13,6 +13,15 @@ function on(els, type, fn) {
 }
 
 
+function offsetTop(el) {
+  var offset = 0;
+  do {
+    offset += el.offsetTop;
+  } while (el = el.offsetParent);
+  return offset;
+}
+
+
 // finding out keyCode:
 // http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 function addShortcut(keyCode, mods, callback) {
@@ -81,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /// Right side controls
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   on($id('wrap'), 'click', function(e) {
     e.preventDefault();
     $id('content').classList.toggle('wrap');
@@ -96,16 +105,37 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!table) return;
 
   on(table, 'mousedown', highlightClicks.bind(this, table));
-  setHighlight();
+  var sels = setHighlight().sort();
 
-  var sels = getSelections().sort();
   var sel = sels[0];
   // if there is no way for browser to understand what to do
-  if (sel && sels.length > 1 && (sel.start != sel.end)) {
-    $id(sel.start).scrollIntoView();
+  if (sel && (sels.length > 1 || (sel.start != sel.end))) {
+    window.scroll({top: offsetTop($id(sel.start))});
   }
 });
 
+window.addEventListener('popstate', function() {
+  setHighlight();
+});
+
+
+/// Lexer select
+document.addEventListener('DOMContentLoaded', function() {
+  var lexers = $id('lexers');
+  if (!lexers) return;
+
+  var currentLexer = lexers.value;
+  lexers.addEventListener('change', function(e) {
+    if (currentLexer != lexers.value) {
+      window.location.search = '?as=' + encodeURIComponent(lexers.value);
+    }
+  });
+
+  [].forEach.call($qsa('time'), function(t) {
+    var d = new Date(t.dateTime);
+    t.innerText = d.toLocaleString();
+  });
+});
 
 /// Parse URL to determine what should be highlighted
 function parseSelectionPair(s) {
@@ -149,6 +179,7 @@ function setHighlight(/* optional */ sels) {
       $id(i).classList.add('selected');
     }
   }
+  return sels;
 }
 
 /// Handler to highlight whatever user clicks
@@ -172,6 +203,6 @@ function highlightClicks(table, e) {
   }
 
   // we have updated selection in-place, so should be okay
-  window.location.hash = '#' + encodeSelections(sels);
+  window.history.pushState(null, null, '#' + encodeSelections(sels));
   setHighlight(sels);
 }

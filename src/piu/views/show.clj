@@ -48,18 +48,4 @@
          (:lines data))]]]
 
     [:span.note
-     "&uarr; Click line number to highlight; hold shift to highlight range; hold cmd/ctrl to add ranges"]
-
-    [:script
-     "var lexers = $id('lexers');
-        var currentLexer = lexers.value;
-        lexers.addEventListener('change', function(e) {
-          if (currentLexer != lexers.value) {
-            window.location.search = '?as=' + encodeURIComponent(lexers.value);
-          }
-        });
-
-        [].forEach.call($qsa('time'), function(t) {
-          var d = new Date(t.dateTime);
-          t.innerText = d.toLocaleString();
-        });"]))
+     "&uarr; Click line number to highlight; hold shift to highlight range; hold cmd/ctrl to add ranges"]))
