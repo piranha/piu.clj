@@ -182,12 +182,16 @@ function setHighlight() {
 
 function scrollIntoView() {
   var sels = getSelections().sort();
+  if (!sels.length) return;
 
   var sel = sels[0];
-  // if there is no way for browser to understand what to do
-  if (sel && (sels.length > 1 || (sel.start != sel.end))) {
-    window.scroll({top: offsetTop($id(sel.start))});
-  }
+  // Browser scroll on hash change is hard to determine, so we just override it
+  // with our own logic. Timeout is needed to perform scroll after browser.
+  setTimeout(function() {
+    var el = $id(sel.start);
+    var offset = offsetTop(el);
+    window.scroll(0, offset);
+  }, 1);
 }
 
 
