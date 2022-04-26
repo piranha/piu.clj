@@ -17,7 +17,7 @@ jobs:
           m2-
     - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '22.0.0.2.java17'
+        graalvm-version: '22.1.0.java17'
     - uses: DeLaGuardo/setup-clojure@master
       with:
         tools-deps: '1.10.3.1058'

@@ -13,7 +13,7 @@
   org.slf4j/slf4j-simple      {:mvn/version "1.7.35"}
   com.github.rjeschke/txtmark {:mvn/version "0.13"}
 
-  ;;; to initialize clojure classes at build time
+;;; to initialize clojure classes at build time
   com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}}
 
  :jvm-opts ["-Djava.net.preferIPv4Stack=true"
@@ -59,10 +59,10 @@
                      "-H:+RemoveSaturatedTypeFlows"
                      "-H:ResourceConfigurationFiles=resource-config.json"
                      "--report-unsupported-elements-at-runtime"
-                     "--initialize-at-run-time"
+                     "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder"
                      "-H:DashboardDump=piu-dash"
                      ;;"-H:+DashboardCode"
-                     "-H:+DashboardHeap"]}
+                     "-H:+DashboardAll"]}
 
   :ancient {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
             :main-opts  ["-m" "antq.core"]}}}
