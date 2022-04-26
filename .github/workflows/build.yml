@@ -8,8 +8,8 @@ jobs:
   build:
     runs-on: buildjet-4vcpu-ubuntu-2004
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2.1.7
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: ~/.m2
         key: m2-${{ hashFiles('**/deps.edn') }}
@@ -20,17 +20,16 @@ jobs:
         graalvm-version: '22.1.0.java17'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        tools-deps: '1.10.3.1058'
+        cli: '1.11.1.1113'
     - run: gu install native-image
     - run: make compile
     - name: "Generate tag"
       run: |
         COMMIT_DATE=$(git show -s --format=%cd --date=format:%y%m%d-%H%M HEAD)
         echo "tag_name=${COMMIT_DATE}" >> $GITHUB_ENV
-    - uses: svenstaro/upload-release-action@v2
+        mv piu piu-linux-amd64
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: piu
-        asset_name: piu-linux-amd64
-        tag: ${{ env.tag_name }}
-        overwrite: true
+        files: piu-linux-amd64
+        tag_name: ${{ env.tag_name }}

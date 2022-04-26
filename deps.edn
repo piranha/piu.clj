@@ -1,6 +1,6 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
- {org.clojure/clojure         {:mvn/version "1.10.3"}
+ {org.clojure/clojure         {:mvn/version "1.11.1"}
   ring/ring-core              {:mvn/version "1.9.5"}
   http-kit/http-kit           {:mvn/version "2.5.3"}
   org.clojure/data.json       {:mvn/version "2.4.0"}
@@ -9,8 +9,8 @@
   hiccup/hiccup               {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   ;; com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
-  org.slf4j/slf4j-api         {:mvn/version "1.7.35"}
-  org.slf4j/slf4j-simple      {:mvn/version "1.7.35"}
+  org.slf4j/slf4j-api         {:mvn/version "1.7.36"}
+  org.slf4j/slf4j-simple      {:mvn/version "1.7.36"}
   com.github.rjeschke/txtmark {:mvn/version "0.13"}
 
 ;;; to initialize clojure classes at build time
@@ -21,8 +21,8 @@
 
  :aliases
  {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.9.0"}
-                     cider/cider-nrepl             {:mvn/version "0.28.1"}
-                     refactor-nrepl/refactor-nrepl {:mvn/version "3.2.0"}
+                     cider/cider-nrepl             {:mvn/version "0.28.3"}
+                     refactor-nrepl/refactor-nrepl {:mvn/version "3.5.2"}
                      clj-commons/pomegranate       {:mvn/version "1.2.1"}}
         :main-opts  ["-i" "dev/user.clj"
                      "-e" "(start)"
@@ -30,7 +30,7 @@
                      "-i"
                      "--middleware" "[\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
-  :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.1.2"}}
+  :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.1.4"}}
          :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                      "-Dclojure.spec.skip-macros=true"]
          :main-opts ["-m uberdeps.uberjar"
