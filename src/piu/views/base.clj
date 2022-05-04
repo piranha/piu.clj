@@ -49,12 +49,13 @@
       [:div#content.flexv.unit content]]]))
 
 
-(defn lexer-select [lexer lexers]
+(defn lexer-select [lexer lexers & [{:keys [onchange]}]]
   (hi/html
-    [:input#lexers {:list    "lexers-list"
-                    :name    "lexer"
-                    :value   lexer
-                    :onfocus "this.select()"
+    [:input#lexers {:list     "lexers-list"
+                    :name     "lexer"
+                    :value    lexer
+                    :onfocus  "this.select()"
+                    :onchange onchange
                     :tabindex 1}]
     [:datalist#lexers-list
      [:option {:value "guess"} "Guess type"]

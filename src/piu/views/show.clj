@@ -18,7 +18,7 @@
       lexer]
 
      [:span {:style "padding-left: 2em;"}
-      (base/lexer-select lexer lexers) " "
+      (base/lexer-select lexer lexers {:onchange "asLexer(event)"}) " "
 
       (when owner?
         '([:a {:href "edit/"} "edit"]

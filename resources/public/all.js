@@ -116,23 +116,19 @@ window.addEventListener('popstate', function() {
 });
 
 
-/// Lexer select
+/// To local date time
 document.addEventListener('DOMContentLoaded', function() {
-  var lexers = $id('lexers');
-  if (!lexers) return;
-
-  var currentLexer = lexers.value;
-  lexers.addEventListener('change', function(e) {
-    if (currentLexer != lexers.value) {
-      window.location.search = '?as=' + encodeURIComponent(lexers.value);
-    }
-  });
-
   [].forEach.call($qsa('time'), function(t) {
     var d = new Date(t.dateTime);
     t.innerText = d.toLocaleString();
   });
 });
+
+function asLexer(e) {
+  if (e.target.value !== e.target.defaultValue) {
+    window.location.search = '?as=' + encodeURIComponent(e.target.value);
+  }
+}
 
 /// Parse URL to determine what should be highlighted
 function parseSelectionPair(s) {
