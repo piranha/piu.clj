@@ -156,7 +156,7 @@
          :cookies {id      {:value     (sign/encrypt id)
                             :path      "/"
                             :same-site :strict
-                            :max-age   (* 3600 24 7)}
+                            :max-age   (* 3600 24 365)}
                    "lexer" {:value     lexer
                             :path      "/"
                             :same-site :strict
