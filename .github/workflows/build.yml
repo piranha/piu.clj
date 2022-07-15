@@ -28,8 +28,9 @@ jobs:
         COMMIT_DATE=$(git show -s --format=%cd --date=format:%y%m%d-%H%M HEAD)
         echo "tag_name=${COMMIT_DATE}" >> $GITHUB_ENV
         mv piu piu-linux-amd64
+        gzip piu-linux-amd64
     - name: Publish release
       uses: softprops/action-gh-release@v1
       with:
-        files: piu-linux-amd64
+        files: piu-linux-amd64.gz
         tag_name: ${{ env.tag_name }}
