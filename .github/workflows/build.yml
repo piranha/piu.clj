@@ -17,11 +17,12 @@ jobs:
           m2-
     - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '22.1.0.java17'
+        graalvm-version: '22.2.0.java17'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        cli: '1.11.1.1113'
+        cli: '1.11.1.1149'
     - run: gu install native-image
+    - run: gu install js
     - run: make compile
     - name: "Generate tag"
       run: |

@@ -2,9 +2,9 @@
  :deps
  {org.clojure/clojure         {:mvn/version "1.11.1"}
   ring/ring-core              {:mvn/version "1.9.5"}
-  http-kit/http-kit           {:mvn/version "2.5.3"}
+  http-kit/http-kit           {:mvn/version "2.6.0"}
   org.clojure/data.json       {:mvn/version "2.4.0"}
-  metosin/jsonista            {:mvn/version "0.3.5"}
+  metosin/jsonista            {:mvn/version "0.3.6"}
   mount/mount                 {:mvn/version "0.1.16"}
   hiccup/hiccup               {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
@@ -12,6 +12,8 @@
   org.slf4j/slf4j-api         {:mvn/version "1.7.36"}
   org.slf4j/slf4j-simple      {:mvn/version "1.7.36"}
   com.github.rjeschke/txtmark {:mvn/version "0.13"}
+  ;; maybe this one?
+  ;; https://github.com/nextjournal/markdown
 
 ;;; to initialize clojure classes at build time
   com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}}
@@ -21,8 +23,8 @@
 
  :aliases
  {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.9.0"}
-                     cider/cider-nrepl             {:mvn/version "0.28.3"}
-                     refactor-nrepl/refactor-nrepl {:mvn/version "3.5.2"}
+                     cider/cider-nrepl             {:mvn/version "0.28.5"}
+                     refactor-nrepl/refactor-nrepl {:mvn/version "3.5.3"}
                      clj-commons/pomegranate       {:mvn/version "1.2.1"}}
         :main-opts  ["-i" "dev/user.clj"
                      "-e" "(start)"
