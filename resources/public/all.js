@@ -1,3 +1,5 @@
+/* jshint esversion: 8 */
+
 var $id = document.getElementById.bind(document);
 var $qs = document.querySelector.bind(document);
 var $qsa = document.querySelectorAll.bind(document);
@@ -46,10 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var text = $id('text');
 
   function submit(e) {
-    if (text || text.value.replace(/^\s+|\s+$/g, '').length) {
-      $qs('form') && $qs('form').submit();
+    if ((text || text.value.replace(/^\s+|\s+$/g, '').length) &&
+        $qs('form')) {
+      $qs('form').submit();
     }
-  };
+  }
 
   addShortcut(13, {ctrl: true}, submit); // ctrl+enter
   addShortcut(13, {meta: true}, submit); // cmd+enter
@@ -155,7 +158,7 @@ function getSelections() {
 
 function encodeSelections(sels) {
   return sels
-    .map((sel) => sel.start == sel.end ? sel.start : sel.start + '-' + sel.end)
+    .map(sel => sel.start == sel.end ? sel.start : sel.start + '-' + sel.end)
     .join(',');
 }
 
@@ -193,7 +196,7 @@ function scrollIntoView() {
 
 /// Handler to highlight whatever user clicks
 function highlightClicks(table, e) {
-  if (!(e.target.className == 'line')) return;
+  if (e.target.className != 'line') return;
 
   var line = parseInt(e.target.dataset.line, 10);
 

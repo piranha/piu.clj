@@ -1,7 +1,7 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
  {org.clojure/clojure         {:mvn/version "1.11.1"}
-  ring/ring-core              {:mvn/version "1.9.5"}
+  ring/ring-core              {:mvn/version "1.9.6"}
   http-kit/http-kit           {:mvn/version "2.6.0"}
   org.clojure/data.json       {:mvn/version "2.4.0"}
   metosin/jsonista            {:mvn/version "0.3.6"}
@@ -9,8 +9,8 @@
   hiccup/hiccup               {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   ;; com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
-  org.slf4j/slf4j-api         {:mvn/version "1.7.36"}
-  org.slf4j/slf4j-simple      {:mvn/version "1.7.36"}
+  org.slf4j/slf4j-api         {:mvn/version "2.0.3"}
+  org.slf4j/slf4j-simple      {:mvn/version "2.0.3"}
   com.github.rjeschke/txtmark {:mvn/version "0.13"}
   ;; maybe this one?
   ;; https://github.com/nextjournal/markdown
@@ -22,9 +22,9 @@
             "-Djava.net.preferIPv4Addresses=true"]
 
  :aliases
- {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "0.9.0"}
-                     cider/cider-nrepl             {:mvn/version "0.28.5"}
-                     refactor-nrepl/refactor-nrepl {:mvn/version "3.5.3"}
+ {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "1.0.0"}
+                     cider/cider-nrepl             {:mvn/version "0.28.6"}
+                     refactor-nrepl/refactor-nrepl {:mvn/version "3.6.0"}
                      clj-commons/pomegranate       {:mvn/version "1.2.1"}}
         :main-opts  ["-i" "dev/user.clj"
                      "-e" "(start)"
