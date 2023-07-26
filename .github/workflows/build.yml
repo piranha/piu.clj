@@ -15,14 +15,15 @@ jobs:
         key: m2-${{ hashFiles('**/deps.edn') }}
         restore-keys: |
           m2-
-    - uses: DeLaGuardo/setup-graalvm@master
+    - uses: graalvm/setup-graalvm@v1
       with:
-        graalvm-version: 'vm-22.3.3'
+        java-version: '20'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        components: 'native-image,js'
     - uses: DeLaGuardo/setup-clojure@master
       with:
         cli: '1.11.1.1347'
-    - run: gu install native-image
-    - run: gu install js
     - run: make compile
     - name: "Generate tag"
       run: |
