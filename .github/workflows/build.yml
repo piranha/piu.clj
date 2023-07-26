@@ -17,10 +17,10 @@ jobs:
           m2-
     - uses: DeLaGuardo/setup-graalvm@master
       with:
-        graalvm-version: '22.3.0.java17'
+        graalvm-version: 'vm-22.3.3'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        cli: '1.11.1.1182'
+        cli: '1.11.1.1347'
     - run: gu install native-image
     - run: gu install js
     - run: make compile
