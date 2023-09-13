@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from optparse import OptionParser
 from fnmatch import fnmatch
-import os, sys, urllib, re
+import os, sys, urllib.request, urllib.parse, re
 
 EXTMAP = #extmap#
 LEXERS = #lexers#
@@ -23,7 +23,7 @@ def findlexer(fn, default=None):
 
 def guess_lexer(data, default):
     if not data.strip():
-        print 'abort: no data'
+        print('abort: no data')
         sys.exit(1)
 
     if '\033' in data:
@@ -57,21 +57,22 @@ def guess_lexer(data, default):
     return default
 
 def print_lexers(*args, **kwargs):
-    print '\n'.join(LEXERS)
+    print('\n'.join(LEXERS))
     sys.exit()
 
 def paste(data, lexer):
     post = {'data': data, 'lexer': lexer}
-    return urllib.urlopen(URI, urllib.urlencode(post)).url
+    data = urllib.parse.urlencode(post).encode('utf-8')
+    return urllib.request.urlopen(URI, data).url
 
 def result(url):
-    print url
+    print(url)
     utils = 'xclip pbcopy'.split()
     for util in utils:
         # not because 0 is success
         if not os.system('which %s > /dev/null 2>&1' % util):
             os.system('printf %s | %s' % (url, util))
-            print 'url copied to clipboard using %s' % util
+            print('url copied to clipboard using %s' % util)
 
 def main():
     usage = 'usage: cat file | %prog  or  %prog file'
@@ -90,12 +91,12 @@ def main():
             sys.exit(parser.print_help())
         lexer = opts.type
     else:
-        data = file(args[0]).read()
+        data = open(args[0]).read()
         lexer = opts.type or findlexer(args[0])
     lexer = lexer or guess_lexer(data, 'plaintext')
 
     if lexer not in LEXERS:
-        print 'abort: %s is not a valid file type' % lexer
+        print('abort: {} is not a valid file type'.format(lexer))
         sys.exit(1)
 
     result(paste(data, lexer))
