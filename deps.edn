@@ -3,27 +3,26 @@
  {org.clojure/clojure         {:mvn/version "1.11.1"}
   ring/ring-core              {:mvn/version "1.10.0"}
   http-kit/http-kit           {:mvn/version "2.7.0"}
-  org.clojure/data.json       {:mvn/version "2.4.0"}
-  metosin/jsonista            {:mvn/version "0.3.7"}
+  com.cnuernber/charred       {:mvn/version "1.032"}
   mount/mount                 {:mvn/version "0.1.17"}
   hiccup/hiccup               {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   ;; com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
-  org.slf4j/slf4j-api         {:mvn/version "2.0.7"}
-  org.slf4j/slf4j-simple      {:mvn/version "2.0.7"}
+  org.slf4j/slf4j-api         {:mvn/version "2.0.9"}
+  org.slf4j/slf4j-simple      {:mvn/version "2.0.9"}
   com.github.rjeschke/txtmark {:mvn/version "0.13"}
   ;; maybe this one?
   ;; https://github.com/nextjournal/markdown
 
 ;;; to initialize clojure classes at build time
-  com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}}
+  com.github.clj-easy/graal-build-time {:mvn/version "1.0.5"}}
 
  :jvm-opts ["-Djava.net.preferIPv4Stack=true"
             "-Djava.net.preferIPv4Addresses=true"]
 
  :aliases
  {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "1.0.0"}
-                     cider/cider-nrepl             {:mvn/version "0.31.0"}
+                     cider/cider-nrepl             {:mvn/version "0.37.1"}
                      refactor-nrepl/refactor-nrepl {:mvn/version "3.9.0"}
                      clj-commons/pomegranate       {:mvn/version "1.2.23"}}
         :main-opts  ["-i" "dev/user.clj"
@@ -40,13 +39,15 @@
                      "--main-class" "piu.main"]}
 
   :native {:main-opts ["-m" "clj.native-image" "piu.main"
+                       "-H:Name=piu"
                        "--language:js"
-                       "-H:Name=piu"    ; optional native image name override
+                       "-march=native"
                        "-H:+ReportExceptionStackTraces"
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"
                        "--report-unsupported-elements-at-runtime"
-                       "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder"]
+                       "--features=clj_easy.graal_build_time.InitClojureClasses"
+                       #_"-H:+DashboardAll"]
            :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
                        "-Dclojure.spec.skip-macros=true"]
            :extra-deps

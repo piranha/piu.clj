@@ -98,7 +98,7 @@
   :start (when ctx
            (js "(lang, s) => {
                if (lang && lang != 'guess') {
-                 return {html: hljs.highlight(lang, s, true).value, lexer: lang};
+                 return {html: hljs.highlight(s, {language: lang, ignoreIllegals: true}).value, lexer: lang};
                } else {
                  var res = hljs.highlightAuto(s);
                  return {html: res.value, lexer: res.language};

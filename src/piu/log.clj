@@ -2,6 +2,7 @@
   "Derived from https://github.com/duct-framework/logger")
 
 
+(set! *warn-on-reflection* true)
 (def *logger nil)
 
 

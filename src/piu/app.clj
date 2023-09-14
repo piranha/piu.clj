@@ -6,7 +6,7 @@
             [ring.middleware.cookies :as cookies]
             [ring.middleware.content-type :as ct]
             [mount.core :as mount]
-            [jsonista.core :as j]
+            [charred.api :as j]
 
             [piu.config :as config]
             [piu.store :as store]
@@ -44,14 +44,10 @@
       (contains? (:query-params req) k)))
 
 
-(def +pretty-mapper+
-  (j/object-mapper {:pretty true}))
-
-
 (defn pretty-json [s]
   (-> s
-      j/read-value
-      (j/write-value-as-string +pretty-mapper+)))
+      j/read-json
+      (j/write-json-str {:indent-str "  "})))
 
 
 (defn show [req]
@@ -204,14 +200,14 @@
 
 
 (defn piu-py [req]
-  (let [lexers (j/write-value-as-string
+  (let [lexers (j/write-json-str
                  (map :lexer @LEXERS))
         extmap (->> (for [item  @LEXERS
                           :when (not (#{"lasso" "arduino" "sml" "c-like"} (:lexer item)))
                           ext   (sort (:aliases item))]
                       [(str "*." (str/lower-case ext)) (:lexer item)])
                     (into (sorted-map))
-                    (j/write-value-as-string))
+                    j/write-json-str)
         script (-> (slurp (io/resource "piu.py.tpl"))
                    (str/replace #"#lexers#" lexers)
                    (str/replace #"#extmap#" extmap))]

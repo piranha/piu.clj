@@ -23,7 +23,7 @@ jobs:
         components: 'js'
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        cli: '1.11.1.1347'
+        cli: '1.11.1.1413'
     - run: make compile
     - name: "Generate tag"
       run: |

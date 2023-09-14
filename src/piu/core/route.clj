@@ -1,10 +1,14 @@
-(ns piu.core.route)
+(ns piu.core.route
+  (:import [java.util.regex Pattern]))
+
+
+(set! *warn-on-reflection* true)
 
 
 (def groups-re #"\(\?<([a-zA-Z][a-zA-Z0-9]*)>")
 
 
-(defn make-handler [re handler]
+(defn make-handler [^Pattern re handler]
   (let [names (->> (re-seq groups-re (.pattern re))
                    (mapv (comp keyword second)))]
     (-> (cond
