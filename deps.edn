@@ -41,7 +41,7 @@
   :native {:main-opts ["-m" "clj.native-image" "piu.main"
                        "-H:Name=piu"
                        "--language:js"
-                       "-march=native"
+                       ;;"-march=native" ; fails in CI because VPS has less capabilities
                        "-H:+ReportExceptionStackTraces"
                        "-H:+RemoveSaturatedTypeFlows"
                        "-H:ResourceConfigurationFiles=resource-config.json"
