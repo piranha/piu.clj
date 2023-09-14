@@ -79,6 +79,8 @@ table { border-spacing: 0;
         text-align: left;
         vertical-align: top; }
 
+.code > span { display: inline-block; } /* in other case spans are not filling td and there is white space between them */
+
 tr:hover .code { background-color: #ffffe3; }
 .selected { background-color: #fafab0; }
 .selecting { background-color: #b0b0fa; }

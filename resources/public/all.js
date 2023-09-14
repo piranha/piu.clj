@@ -172,7 +172,9 @@ function setHighlight() {
 
   for (var j = 0; j < sels.length; j++) {
     for (var i = sels[j].start; i <= sels[j].end; i++) {
-      $id(i).classList.add('selected');
+      let el = $id(i);
+      el.classList.add('selected');
+      el.previousElementSibling.classList.add('selected');
     }
   }
   return sels;
