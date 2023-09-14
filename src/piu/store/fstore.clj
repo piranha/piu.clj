@@ -1,5 +1,5 @@
 (ns piu.store.fstore
-  (:import [java.io FileNotFoundException]
+  (:import [java.io File FileNotFoundException]
            [java.nio.file Path Paths]
            [java.time Instant ZoneId ZonedDateTime]
            [java.util.zip GZIPOutputStream GZIPInputStream])
@@ -22,16 +22,17 @@
   (as-url [this] (.. this (toFile) (toURL))))
 
 
-(defn item-path [path id]
-  (let [prefix (if (> store/ID-LEN (count id))
+(defn item-file ^File [path id]
+  (let [prefix (if (< (count id) 4)
                  "0"
                  (str (first id)))]
-    (Paths/get path (into-array String [prefix (str id ".piu.gz")]))))
+    (io/file
+      (Paths/get path (into-array String [prefix (str id ".piu.gz")])))))
 
 
-(defn ^String item-value [path id]
+(defn item-value ^String [path id]
   (try
-    (with-open [in (-> (io/file (item-path path id))
+    (with-open [in (-> (item-file path id)
                        io/input-stream
                        GZIPInputStream.)]
       (slurp in))
@@ -55,7 +56,7 @@
 (defrecord FStore [path]
   store/Storage
   (has [this id]
-    (.exists (io/file (item-path path id))))
+    (.exists (item-file path id)))
 
   (read [this id]
     (when-let [s (item-value path id)]
@@ -86,7 +87,7 @@
                    :html  html
                    :date  (.getEpochSecond created)}
           s       (tn/dumps data)
-          f       (io/file (item-path path id))]
+          f       (item-file path id)]
       (.mkdirs (.getParentFile f))
       (with-open [out (-> f
                           io/file
