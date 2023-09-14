@@ -1,6 +1,7 @@
 (ns piu.store
   (:refer-clojure :exclude [read])
-  (:require [piu.highlight :as hl]))
+  (:require [piu.highlight :as hl]
+            [piu.config :as config]))
 
 
 (set! *warn-on-reflection* true)
@@ -31,13 +32,13 @@
 
 
 (def ALPHABET "0123456789abcdefghjiklmnopqrstuvwxyz")
-(def ID-LEN 4)
+(def IDLEN (config/IDLEN))
 
 
 (defn -generate []
   (let [cnt (count ALPHABET)]
     (apply str
-      (repeatedly ID-LEN
+      (repeatedly IDLEN
         (fn []
           (get ALPHABET (Math/floor (* cnt (Math/random)))))))))
 

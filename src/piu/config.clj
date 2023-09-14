@@ -26,3 +26,8 @@
     (binding [*out* *err*]
       (print "\nWARNING: set 'SECRET' env variable to be secure\n\n")
       (.getBytes "epic-secret" "UTF-8"))))
+
+
+(defn IDLEN []
+  (Integer/parseInt
+    (or (System/getenv "IDLEN") "5")))
