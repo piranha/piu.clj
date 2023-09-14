@@ -204,22 +204,20 @@
 
 
 (defn piu-py [req]
-  (let [lexers (->> @LEXERS
-                    (map #(format "'%s'" (:lexer %)))
-                    (str/join ",")
-                    (format "[%s]"))
-        extmap (->> @LEXERS
-                    (remove #(#{"lasso" "arduino" "sml" "c-like"} (:lexer %)))
-                    (mapcat (fn [x] (map vector (:aliases x) (repeat (:lexer x)))))
-                    (map #(format "'*.%s': '%s'" (first %) (second %)))
-                    (str/join ",")
-                    (format "{%s}"))
-        src    (-> (slurp (io/resource "piu.py.tpl"))
+  (let [lexers (j/write-value-as-string
+                 (map :lexer @LEXERS))
+        extmap (->> (for [item  @LEXERS
+                          :when (not (#{"lasso" "arduino" "sml" "c-like"} (:lexer item)))
+                          ext   (sort (:aliases item))]
+                      [(str "*." (str/lower-case ext)) (:lexer item)])
+                    (into (sorted-map))
+                    (j/write-value-as-string))
+        script (-> (slurp (io/resource "piu.py.tpl"))
                    (str/replace #"#lexers#" lexers)
                    (str/replace #"#extmap#" extmap))]
     {:status  200
      :headers {"content-type" "text/plain"}
-     :body    src}))
+     :body    script}))
 
 
 (def router
