@@ -79,7 +79,7 @@ table { border-spacing: 0;
         text-align: left;
         vertical-align: top; }
 
-.code > span { display: inline-block; } /* in other case spans are not filling td and there is white space between them */
+.code > span { display: inline-block; } /* so spans will fill td and there is no white space between them */
 
 tr:hover .code { background-color: #ffffe3; }
 .selected { background-color: #fafab0; }
@@ -99,7 +99,10 @@ footer a { color: black; }
 .wrap .line, .wrap .note { display: none; }
 .wrap .code { white-space: pre-wrap; }
 
-/* About */
+/* About, copied a bit from mobi.css */
+/* mobi.css itself is not used to avoid conflicts with main.css */
 
 .about { line-height: 1.5em; }
-.about code { background-color: #f2f2f2; font-size: 85%; padding: .2em .3em; }
+.about pre { background-color: #f2f2f2; padding: .2em .3em; }
+.about code { background-color: #f2f2f2; font-size: 85%; }
+pre code { background-color: transparent; padding: 0; }

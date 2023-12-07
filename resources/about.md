@@ -36,7 +36,7 @@ functionality.
 
 API is dead simple, it's just a POST form-encoded request to
 `https://paste.in.ua/` with a single required parameter - `data`. Supply a
-`lexer` to pre-select a lexer. It's default to `guess` (which can select
+`lexer` to pre-select a lexer. It defaults to `guess` (which can select
 surprisingly weird stuff).
 
 ## Tools
