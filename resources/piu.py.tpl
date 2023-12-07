@@ -9,7 +9,8 @@ LEXERS = #lexers#
 
 LEXERMAP = {'emacs-lisp': 'lisp',
             'nxml': 'xml',
-            'html': 'xml'}
+            'html': 'xml',
+            'sh': 'bash'}
 
 URI = 'https://paste.in.ua/'
 mode_re = re.compile('-\*-.*mode: (?P<mode>[\w\.\-]+).*-\*-', re.I)
@@ -36,8 +37,8 @@ def guess_lexer(data, default):
     if line.startswith('#!'):
         executable = os.path.basename(line.split()[0][2:])
         if executable == 'env':
-            return line.split()[1]
-        return executable
+            executable = line.split()[1]
+        return LEXERMAP.get(executable, executable)
 
     # file variables appear only in first two lines of file
     for line in lines[:2]:
