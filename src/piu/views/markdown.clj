@@ -1,7 +1,8 @@
 (ns piu.views.markdown
   (:require [hiccup.core :as hi]
-            [hiccup.page :refer [doctype]])
-  (:import [com.github.rjeschke.txtmark Processor Configuration]))
+            [hiccup.page :refer [doctype]]
+            [markdown.core :as markdown]
+            [clojure.string :as str]))
 
 
 (set! *warn-on-reflection* true)
@@ -30,8 +31,19 @@
         ")"]]]]))
 
 
+(defn heading-anchors
+  "build-in heading-anchors generate no link"
+  [text state]
+  [(or (when (:inline-heading state)
+         (when-let [[level inner] (rest (re-matches #"<h(\d)>(.*)</h\d>" text))]
+           (let [anchor (-> inner str/lower-case (str/replace " " "-"))]
+             (format "<h%s id=\"%s\"><a href=\"#%s\">%s</a></h%s>"
+               level anchor anchor text level))))
+       text)
+   state])
+
 (defn render [^String md]
-  (let [cfg (-> (Configuration/builder)
-                (.forceExtentedProfile)
-                (.build))]
-    (Processor/process md cfg)))
+  (markdown/md-to-html-string md
+    :reference-links? true
+    :footnotes? true
+    :custom-transformers [heading-anchors]))
