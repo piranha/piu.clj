@@ -5,5 +5,5 @@
 /.nrepl-port
 /piu.sqlite
 /store
-/highlight.js/
 /.clj-kondo/.cache
+/highlight.exe

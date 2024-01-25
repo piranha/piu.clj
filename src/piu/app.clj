@@ -1,5 +1,6 @@
 (ns piu.app
   (:require [clojure.java.io :as io]
+            [clojure.java.shell :as sh]
             [clojure.string :as str]
             [ring.util.response :as response]
             [ring.middleware.params :as params]
@@ -29,13 +30,9 @@
 
 (def SPAM-RE #"^comment\d+,")
 
-(def get-lexers-js
-  "hljs.listLanguages().map(l => {
-    var x = hljs.getLanguage(l);
-    return {lexer: l, name: x.name, aliases: x.aliases};
-   });")
-(def LEXERS (delay (let [lang-data (hl/js get-lexers-js)]
-                     (sort-by (comp str/lower-case :name) lang-data))))
+(def LEXERS (delay (-> (sh/sh "sh" "-c" "./highlight.exe --langs")
+                       :out
+                       j/read-json)))
 (def LEXER-SET (delay (into #{} (map :lexer @LEXERS))))
 
 

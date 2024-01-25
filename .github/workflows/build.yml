@@ -18,10 +18,8 @@ jobs:
     - uses: graalvm/setup-graalvm@v1
       with:
         java-version: '21'
-        version: '21.0.2'
         distribution: 'graalvm-community'
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        components: 'js'
     - uses: DeLaGuardo/setup-clojure@master
       with:
         cli: '1.11.1.1435'

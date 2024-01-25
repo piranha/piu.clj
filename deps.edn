@@ -1,9 +1,6 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
  {org.clojure/clojure               {:mvn/version "1.11.1"}
-  org.graalvm.polyglot/polyglot     {:mvn/version "23.1.2"}
-  org.graalvm.polyglot/js-community {:mvn/version "23.1.2"
-                                     :extension   "pom"}
 
   ring/ring-core              {:mvn/version "1.11.0"}
   http-kit/http-kit           {:mvn/version "2.7.0"}
