@@ -40,6 +40,6 @@
         s           (str/trim s)
         res         (:out (sh/sh "sh" "-c" (format "./highlight.exe --lang %s" lang) :in s))
         [lang html] (str/split res #"\n" 2)]
-    {:lang  lang
+    {:lexer lang
      :html  html
      :lines (make-lines html)}))
