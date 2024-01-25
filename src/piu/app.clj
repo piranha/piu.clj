@@ -32,7 +32,7 @@
 
 (def LEXERS (delay (-> (sh/sh "sh" "-c" "./highlight.exe --langs")
                        :out
-                       j/read-json)))
+                       (j/read-json :key-fn keyword))))
 (def LEXER-SET (delay (into #{} (map :lexer @LEXERS))))
 
 
