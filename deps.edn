@@ -1,16 +1,16 @@
 {:paths ["src" "resources" #_"classes"]
  :deps
- {org.clojure/clojure               {:mvn/version "1.11.1"}
+ {org.clojure/clojure               {:mvn/version "1.11.2"}
 
-  ring/ring-core              {:mvn/version "1.11.0"}
+  ring/ring-core              {:mvn/version "1.12.0"}
   http-kit/http-kit           {:mvn/version "2.7.0"}
   com.cnuernber/charred       {:mvn/version "1.034"}
-  mount/mount                 {:mvn/version "0.1.17"}
+  mount/mount                 {:mvn/version "0.1.18"}
   hiccup/hiccup               {:mvn/version "1.0.5"}
   ;; org.xerial/sqlite-jdbc    {:mvn/version "3.31.1"}
   ;; com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
-  org.slf4j/slf4j-api         {:mvn/version "2.0.11"}
-  org.slf4j/slf4j-simple      {:mvn/version "2.0.11"}
+  org.slf4j/slf4j-api         {:mvn/version "2.0.12"}
+  org.slf4j/slf4j-simple      {:mvn/version "2.0.12"}
   net.solovyov/markdown-clj   {:mvn/version "1.11.8"}
   ;;markdown-clj/markdown-clj   {:mvn/version "1.11.8"}
   ;; maybe this one?
@@ -23,53 +23,21 @@
             "-Djava.net.preferIPv4Addresses=true"]
 
  :aliases
- {:dev {:extra-deps {nrepl/nrepl                   {:mvn/version "1.1.0"}
-                     cider/cider-nrepl             {:mvn/version "0.45.0"}
-                     refactor-nrepl/refactor-nrepl {:mvn/version "3.9.1"}
-                     clj-commons/pomegranate       {:mvn/version "1.2.23"}}
-        :main-opts  ["-i" "dev/user.clj"
-                     "-e" "(start)"
-                     "-m" "nrepl.cmdline"
-                     "-i"
-                     "--middleware" "[\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
+ {:main {:exec-fn piu.main/-main}
+  :dev  {:extra-deps {nrepl/nrepl                   {:mvn/version "1.1.1"}
+                      cider/cider-nrepl             {:mvn/version "0.47.0"}
+                      refactor-nrepl/refactor-nrepl {:mvn/version "3.10.0"}
+                      clj-commons/pomegranate       {:mvn/version "1.2.23"}}
+         :main-opts  ["-i" "dev/user.clj"
+                      "-e" "(start)"
+                      "-m" "nrepl.cmdline"
+                      "-i"
+                      "--middleware" "[\"cider.nrepl/cider-middleware\",\"refactor-nrepl.middleware/wrap-refactor\"]"]}
 
-  :uber {:deps      {uberdeps/uberdeps {:mvn/version "1.3.0"}}
-         :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
-                     "-Dclojure.spec.skip-macros=true"]
-         :main-opts ["-m uberdeps.uberjar"
-                     "--target" "target/piu.jar"
-                     "--main-class" "piu.main"]}
-
-  :native {:main-opts ["-m" "clj.native-image" "piu.main"
-                       "-o" "piu"
-                       "-H:+UnlockExperimentalVMOptions"
-                       ;;"--language:js"
-                       ;;"-march=native" ; fails in CI because VPS has less capabilities
-                       "-H:+ReportExceptionStackTraces"
-                       "-H:+RemoveSaturatedTypeFlows"
-                       "-H:ResourceConfigurationFiles=resource-config.json"
-                       "--report-unsupported-elements-at-runtime"
-                       "--features=clj_easy.graal_build_time.InitClojureClasses"
-                       #_"-H:+DashboardAll"]
-           :jvm-opts  ["-Dclojure.compiler.direct-linking=true"
+  :build {:deps       {io.github.clojure/tools.build {:mvn/version "0.10.0"}}
+          :jvm-opts   ["-Dclojure.compiler.direct-linking=true"
                        "-Dclojure.spec.skip-macros=true"]
-           :extra-deps
-           {clj.native-image/clj.native-image
-            {:git/url "https://github.com/taylorwood/clj.native-image.git"
-             :sha     "4604ae76855e09cdabc0a2ecc5a7de2cc5b775d6"}}}
-
-  :dump {:main-opts ["-m" "clj.native-image" "piu.main"
-                     "-o" "piu"
-                     "-H:+UnlockExperimentalVMOptions"
-                     ;;"--language:js"
-                     "-H:+ReportExceptionStackTraces"
-                     "-H:+RemoveSaturatedTypeFlows"
-                     "-H:ResourceConfigurationFiles=resource-config.json"
-                     "--report-unsupported-elements-at-runtime"
-                     "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory$SSLHolder"
-                     "-H:DashboardDump=piu-dash"
-                     ;;"-H:+DashboardCode"
-                     "-H:+DashboardAll"]}
+          :ns-default build}
 
   :ancient {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
             :main-opts  ["-m" "antq.core"]}}}

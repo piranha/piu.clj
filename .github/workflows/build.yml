@@ -9,7 +9,7 @@ jobs:
     runs-on: buildjet-8vcpu-ubuntu-2204
     steps:
     - uses: actions/checkout@v4
-    - uses: buildjet/cache@v3
+    - uses: buildjet/cache@v4
       with:
         path: ~/.m2
         key: m2-${{ hashFiles('**/deps.edn') }}
@@ -17,13 +17,13 @@ jobs:
           m2-
     - uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '21'
+        java-version: '22'
         distribution: 'graalvm-community'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        cli: '1.11.1.1435'
-    - run: make compile
+        cli: '1.11.2.1446'
+    - run: make native
     - name: "Generate tag"
       run: |
         COMMIT_DATE=$(git show -s --format=%cd --date=format:%y%m%d-%H%M HEAD)
