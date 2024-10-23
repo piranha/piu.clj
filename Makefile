@@ -1,5 +1,9 @@
-export JAVA_HOME ?= $(HOME)/var/graalvm-community-openjdk-21.0.2+13.1/Contents/Home
-export GRAALVM_HOME ?= $(JAVA_HOME)
+ifneq (,$(wildcard $(JAVA_HOME)/bin/native-image))
+	GRAALVM_HOME ?= $(JAVA_HOME)
+else ifneq (,$(shell which native-image))
+else
+	GRAALVM_HOME ?= $(HOME)/var/graalvm-community-openjdk-23.0.1+11.1/Contents/Home
+endif
 
 run:
 	clj -M:dev
@@ -7,13 +11,12 @@ run:
 target/piu.jar: deps.edn $(shell find src -type f)
 	clojure -Srepro -T:build uber
 
-uber: target/piu.jar
+uber: target/piu.jar build.clj
 
 native: uber
 	$(GRAALVM_HOME)/bin/native-image \
 	-jar target/piu.jar \
 	-o piu \
-	--report-unsupported-elements-at-runtime \
 	-H:+UnlockExperimentalVMOptions \
 	-H:ResourceConfigurationFiles=resource-config.json \
 	-H:+ReportExceptionStackTraces \
