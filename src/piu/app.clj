@@ -181,14 +181,9 @@
 
 (defmethod response/resource-data :resource
   [^java.net.URL url]
-  (let [data (.getBytes (slurp url) "UTF-8")]
-    {:content        data
-     :content-length (count data)})
-  ;; NOTE: commented out since GraalVM 23.0.1 blocks on `.getContentLength` indefinitely
-  #_
   (let [conn (.openConnection url)]
     {:content        (.getInputStream conn)
-     :content-length (let [len (.getContentLength conn)] (if-not (pos? len) len))}))
+     :content-length (let [len (.getContentLength conn)] (when-not (pos? len) len))}))
 
 
 (defn resource [req]

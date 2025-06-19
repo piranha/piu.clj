@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: buildjet-8vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: buildjet/cache@v4
@@ -17,12 +17,12 @@ jobs:
           m2-
     - uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '23'
+        java-version: '24'
         distribution: 'graalvm-community'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        cli: '1.12.0.1479'
+        cli: '1.12.1.1550'
     - run: make native
     - name: "Generate tag"
       run: |
@@ -31,7 +31,7 @@ jobs:
         mv piu piu-linux-amd64
         gzip piu-linux-amd64
     - name: Publish release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: piu-linux-amd64.gz
         tag_name: ${{ env.tag_name }}

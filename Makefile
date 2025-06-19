@@ -2,7 +2,7 @@ ifneq (,$(wildcard $(JAVA_HOME)/bin/native-image))
 	GRAALVM_HOME ?= $(JAVA_HOME)
 else ifneq (,$(shell which native-image))
 else
-	GRAALVM_HOME ?= $(HOME)/var/graalvm-community-openjdk-23.0.1+11.1/Contents/Home
+	GRAALVM_HOME ?= $(HOME)/var/graalvm-community/Contents/Home
 endif
 
 run:
