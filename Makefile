@@ -8,7 +8,7 @@ endif
 run:
 	clj -M:dev
 
-target/piu.jar: deps.edn $(shell find src -type f)
+target/piu.jar: deps.edn $(shell find src resources -type f)
 	clojure -Srepro -T:build uber
 
 uber: target/piu.jar build.clj
@@ -18,7 +18,6 @@ native: uber
 	-jar target/piu.jar \
 	-o piu \
 	-H:+UnlockExperimentalVMOptions \
-	-H:ResourceConfigurationFiles=resource-config.json \
 	-H:+ReportExceptionStackTraces \
 	--no-fallback \
 	--features=clj_easy.graal_build_time.InitClojureClasses
