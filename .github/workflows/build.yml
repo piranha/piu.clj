@@ -17,12 +17,12 @@ jobs:
           m2-
     - uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '24'
+        java-version: '25'
         distribution: 'graalvm-community'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - uses: DeLaGuardo/setup-clojure@master
       with:
-        cli: '1.12.1.1550'
+        cli: '1.12.2.1565'
     - run: make native
     - name: "Generate tag"
       run: |

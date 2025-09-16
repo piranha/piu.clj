@@ -21,15 +21,15 @@
       (base/lexer-select lexer lexers {:onchange "asLexer(event)"}) " "
 
       (when owner?
-        '([:a {:href "edit/"} "edit"]
+        (list [:a {:href "edit/"} "edit"]
           " | "))
 
       (when (= lexer "json")
-        '([:a {:href "?pretty"} "pretty-print JSON"]
+        (list [:a {:href "?pretty"} "pretty-print JSON"]
           " | "))
 
       (when (#{"md" "markdown" "html"} lexer)
-        '([:a {:href "render/"} "render content as HTML"]
+        (list [:a {:href "render/"} "render content as HTML"]
           " | "))
 
       [:a#wrap {:href "#"} "toggle wrap"]
