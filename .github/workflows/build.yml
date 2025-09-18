@@ -15,11 +15,9 @@ jobs:
         key: m2-${{ hashFiles('**/deps.edn') }}
         restore-keys: |
           m2-
-    - uses: graalvm/setup-graalvm@v1
-      with:
-        java-version: '25'
-        distribution: 'graalvm-community'
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: sdkman/sdkman-action@main
+      id: sdkman
+    - run: java -version
     - uses: DeLaGuardo/setup-clojure@master
       with:
         cli: '1.12.2.1565'
