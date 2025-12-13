@@ -138,7 +138,7 @@
        :body "lexer and raw are required parameters"}
 
       :else
-      (let [raw (get form "data")
+      (let [raw (str/replace (get form "data") "\r\n" "\n")
             res (hl/hl lexer raw)
             id  (store/write db {:id    id
                                  :lexer (:lexer res)
