@@ -13,7 +13,7 @@ LEXERMAP = {'emacs-lisp': 'lisp',
             'sh': 'bash'}
 
 URI = 'https://paste.in.ua/'
-mode_re = re.compile('-\*-.*mode: (?P<mode>[\w\.\-]+).*-\*-', re.I)
+mode_re = re.compile(r'-\*-.*mode: (?P<mode>[\w\.\-]+).*-\*-', re.I)
 
 def findlexer(fn, default=None):
     fn = os.path.basename(fn)
